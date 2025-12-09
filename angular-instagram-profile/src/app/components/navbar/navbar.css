@@ -1,0 +1,21 @@
+nav {
+  height: 90vh;
+  width: 20rem;
+}
+
+:host ::ng-deep .p-menu {
+  height: 100%;
+  font-size: 2.2rem;
+  border: none;
+  background: transparent !important;
+}
+:host ::ng-deep .p-menu ul {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+:host ::ng-deep .p-menu-item-icon {
+  font-size: 2rem !important;
+}
