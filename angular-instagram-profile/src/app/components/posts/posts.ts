@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { TabsModule, Tab, TabList } from 'primeng/tabs';
 import { Post } from '../post/post';
 import { Post as PostModel } from './../../models/post.model';
+import { Images } from '../../models/images.enum';
 @Component({
   standalone: true,
   selector: 'app-posts',
@@ -11,35 +12,21 @@ import { Post as PostModel } from './../../models/post.model';
 })
 export class Posts {
   updateRandomValue(): void {
-    console.log(this.randomNum());
-
     this.randomNum.set(Math.floor(Math.random() * 10) + 1);
-    console.log(this.randomNum());
   }
   randomNum = signal<number>(Math.floor(Math.random() * 7));
 
   posts = signal<PostModel[]>([
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-    { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
+    { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
   ]);
 }

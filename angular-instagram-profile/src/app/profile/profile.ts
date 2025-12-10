@@ -6,7 +6,7 @@ import { Navbar } from '../components/navbar/navbar';
 
 @Component({
   selector: 'app-profile',
-  imports: [Circle, ButtonModule, Posts, Navbar],
+  imports: [ButtonModule, Posts, Navbar],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   standalone: true,
   templateUrl: './profile.html',

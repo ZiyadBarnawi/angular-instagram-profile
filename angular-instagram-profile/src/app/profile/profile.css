@@ -21,3 +21,10 @@
   width: 90rem;
   overflow-x: scroll;
 }
+
+:host ::ng-deep .p-button-lg {
+  width: 100%;
+}
+.div-action-button {
+  width: 20rem;
+}
