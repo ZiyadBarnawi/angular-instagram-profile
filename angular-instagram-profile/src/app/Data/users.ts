@@ -3,8 +3,8 @@ import { User } from '../models/user.model';
 export let Users: User[] = [
   {
     username: 'Abdullah',
-    description: 'Learning spring boot, and drinking coffee.',
-    profilePic: Images[1],
+    bio: 'Learning spring boot, and drinking coffee.',
+    pfp_url: Images[1],
     followers: 21,
     following: 171,
     posts: [
@@ -14,12 +14,12 @@ export let Users: User[] = [
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
     ],
-    stories: ['sunnyDay.jpg', 'carbet.jpg'],
+    stories: [Images[0], Images[2]],
   },
   {
     username: 'Firas',
-    description: 'A new user to this site',
-    profilePic: Images[3],
+    bio: 'A new user to this site',
+    pfp_url: Images[3],
     followers: 231,
     following: 111,
     posts: [
@@ -28,12 +28,12 @@ export let Users: User[] = [
 
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
     ],
-    stories: ['sunnyDay.jpg', 'carbet.jpg'],
+    stories: [Images[3], Images[4]],
   },
   {
     username: 'Hamza',
-    description: 'Hello there👋👋 ',
-    profilePic: Images[4],
+    bio: 'Hello there👋👋 ',
+    pfp_url: Images[4],
     followers: 251,
     following: 21,
     posts: [
@@ -46,12 +46,12 @@ export let Users: User[] = [
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
     ],
-    stories: ['sunnyDay.jpg', 'carbet.jpg'],
+    stories: [Images[0], Images[2], Images[3], Images[4]],
   },
   {
     username: 'Rami',
-    description: 'Testing some stuff',
-    profilePic: Images[1],
+    bio: 'Testing some stuff',
+    pfp_url: Images[1],
     followers: 201,
     following: 18,
     posts: [
@@ -61,24 +61,24 @@ export let Users: User[] = [
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
     ],
-    stories: ['sunnyDay.jpg', 'carbet.jpg'],
+    stories: [Images[1], Images[4]],
   },
   {
     username: 'Ziyad',
-    description: 'Building some PrimeNG stuff',
-    profilePic: Images[2],
+    bio: 'Building some PrimeNG stuff',
+    pfp_url: Images[2],
     followers: 251,
     following: 17,
     posts: [
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
     ],
-    stories: ['sunnyDay.jpg', 'carbet.jpg'],
+    stories: [Images[1], Images[4]],
   },
   {
     username: 'Mohammad',
-    description: 'Testing some stuff',
-    profilePic: Images[4],
+    bio: 'Testing some stuff',
+    pfp_url: Images[4],
     followers: 211,
     following: 12,
     posts: [
@@ -86,6 +86,6 @@ export let Users: User[] = [
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
       { imgSrc: Images[Math.floor(Math.random() * 5)], likesCount: 13 },
     ],
-    stories: ['sunnyDay.jpg', 'carbet.jpg'],
+    stories: [Images[2], Images[4]],
   },
 ];

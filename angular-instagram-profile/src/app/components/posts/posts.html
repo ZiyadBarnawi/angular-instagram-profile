@@ -7,22 +7,22 @@
   </p-tablist>
   <p-tabpanels>
     <p-tabpanel value="0">
-      @for (post of user()?.posts; track $index) {
+      @for (post of user()?.posts?.slice(0, randomNum()); track $index) {
       <app-post [post]="post" />
       }
     </p-tabpanel>
     <p-tabpanel value="1">
-      @for (post of user()?.posts; track $index) {
+      @for (post of user()?.posts?.slice(0, randomNum()); track $index) {
       <app-post [post]="post" />
       }
     </p-tabpanel>
     <p-tabpanel value="2">
-      @for (post of user()?.posts; track $index) {
+      @for (post of user()?.posts?.slice(0, randomNum()); track $index) {
       <app-post [post]="post" />
       }
     </p-tabpanel>
     <p-tabpanel value="3">
-      @for (post of user()?.posts; track $index) {
+      @for (post of user()?.posts?.slice(0, randomNum()); track $index) {
       <app-post [post]="post" />
       }
     </p-tabpanel>

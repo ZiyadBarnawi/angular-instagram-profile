@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, output } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, output } from '@angular/core';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { Circle } from '../../shared/circle/circle';
@@ -9,6 +9,8 @@ import { Images } from '../../models/images.enum';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { User } from '../../models/user.model';
 import { Users } from '../../Data/users';
+import { Http } from '../../services/http';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -20,11 +22,11 @@ import { Users } from '../../Data/users';
 })
 export class Navbar {
   user = output<User>();
-
+  http = inject(Http);
   visible = false;
   formControl = new FormControl();
-  users: User[] = Users;
-  suggestedUsers: User[] = [{ username: '', profilePic: Images[1] }];
+  users: User[] = [];
+  suggestedUsers: User[] = [{ username: '', pfp_url: Images[1] }];
 
   menuItems: MenuItem[] = [
     {
@@ -65,14 +67,39 @@ export class Navbar {
       command: (): void => {},
     },
   ];
-  onSearch(searchWord: any): void {
+  async onSearch(searchWord: any): Promise<void> {
+    //! When the backend is down
+    // let users = Users;
+    // console.log(users);
+
+    // this.suggestedUsers = users.filter((user) =>
+    //   user.username.toLowerCase().includes(searchWord.query?.toLowerCase())
+    // ) as User[];
+    //! When the backend is up
+    (await this.http.getUsers(1)).subscribe((data) => {
+      console.log(data);
+    });
+    let users = await this.http.getUsers();
+    users
+      .pipe(
+        catchError((err) => {
+          console.log(err);
+
+          throw err;
+        })
+      )
+      .subscribe((data: any) => {
+        console.log(data);
+
+        this.suggestedUsers = data.data.filter((user: any) =>
+          user.username.toLowerCase().includes(searchWord.query?.toLowerCase())
+        ) as User[];
+      });
     this.suggestedUsers = this.users.filter((user) =>
       user.username.toLowerCase().includes(searchWord.query?.toLowerCase())
     ) as User[];
   }
   onUserClick(user: any): void {
-    console.log(user);
-
     this.user.emit(user);
   }
 }

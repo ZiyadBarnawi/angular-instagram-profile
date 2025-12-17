@@ -2,10 +2,12 @@ import { Post } from './post.model';
 
 export interface User {
   username: string;
-  description?: string;
-  profilePic: string;
+  bio?: string;
+  pfp_url: string;
   followers?: number;
   following?: number;
   posts?: Post[];
   stories?: string[];
+  hasActiveStory?: boolean;
+  created_at?: Date;
 }

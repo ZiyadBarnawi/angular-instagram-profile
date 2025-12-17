@@ -1,5 +1,5 @@
 <nav>
-  <h1>Instagram</h1>
+  <h1 class="logo">ElmerGram</h1>
   <p-menu [model]="menuItems" class="flex justify-center" styleClass="w-full md:w-60"> </p-menu>
   <p-drawer [(visible)]="visible">
     <p-auto-complete
@@ -7,14 +7,13 @@
       optionLabel="username"
       [formControl]="formControl"
       (completeMethod)="onSearch($event)"
-      ><ng-template class="m-4" #item let-suggestedUser>
+    >
+      <!-- TIP: ng-template is a tag not rendered by default, but when you instructs it to do so. -->
+      <!-- TIP: PrimeNG has a set of templates ids (e.g.: #item) you cas specify to -->
+      <ng-template class="m-4" #item let-suggestedUser>
         <div (click)="onUserClick(suggestedUser)" class="div-suggested-user d-flex gap-1">
           <div class="w-25 h-100 d-flex justify-content-center align-items-center">
-            <img
-              class="w-100 h-100 rounded-circle"
-              src="{{ suggestedUser.profilePic }}"
-              alt="pic"
-            />
+            <img class="w-100 h-100 rounded-circle" src="{{ suggestedUser.pfp_url }}" alt="pic" />
           </div>
           <span class="span-search-username w-75">{{ suggestedUser.username }}</span>
         </div></ng-template

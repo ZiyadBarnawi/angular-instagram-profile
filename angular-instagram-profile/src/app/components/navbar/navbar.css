@@ -32,6 +32,9 @@ nav {
   background-color: rgb(21, 21, 21);
   border: transparent;
 }
+:host ::ng-deep .p-autocomplete-option {
+  pointer-events: all;
+}
 .div-suggested-user {
   pointer-events: all;
 }

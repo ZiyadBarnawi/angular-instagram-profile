@@ -8,6 +8,7 @@ import { Post as PostModel } from './../../models/post.model';
 })
 export class Post {
   post = input<PostModel>();
+  //The rest is for styling
   isHover = false;
   fade = signal<string>('fade');
   onMouseover(): void {

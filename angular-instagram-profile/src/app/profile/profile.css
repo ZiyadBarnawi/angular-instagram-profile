@@ -48,3 +48,25 @@
 .img-pfp--active:hover {
   transform: scale(1.01);
 }
+
+p-message {
+  left: 50%;
+}
+
+.p-button-dialog {
+  /* width: 2rem; */
+  right: 0;
+  /* margin: 2rem; */
+}
+:host ::ng-deep .p-button-dialog button {
+  padding: 0.5rem 2rem;
+  margin-right: 2rem;
+  background-color: rgba(17, 16, 16, 0.822);
+}
+.label-username,
+.label-password {
+  font-size: 1.4rem;
+}
+p-dialog {
+  background-color: rgb(15, 14, 14);
+}

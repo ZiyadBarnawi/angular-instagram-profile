@@ -12,10 +12,9 @@ import { User } from '../../models/user.model';
   styleUrl: './posts.css',
 })
 export class Posts {
-  updateRandomValue(): void {
-    this.randomNum.set(Math.floor(Math.random() * 10) + 1);
-  }
   randomNum = signal<number>(Math.floor(Math.random() * 7));
   user = input<User>();
-  // posts = signal<PostModel[]>([]);
+  updateRandomValue(): void {
+    this.randomNum.set(Math.floor(Math.random() * 7) + 1);
+  }
 }

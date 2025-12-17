@@ -1,5 +1,55 @@
 <!-- <section class=" "> -->
 <div class="d-flex justify-content-between w-100">
+  <!--! Follow Message-->
+  @if(showMessage()){
+  <p-message
+    class="position-absolute"
+    [life]="1500"
+    [severity]="follow() ? 'success' : 'error'"
+    [size]="'large'"
+    >@if(follow()){ Followed!} @else{Unfollowed}</p-message
+  >}
+  <p-button
+    class="p-button-dialog position-absolute"
+    (click)="visibleDialog = true"
+    label="Sign up"
+  />
+  <!-- <p-dialog
+    class="position-absolute left-1/2"
+    header="Edit Profile"
+    [modal]="true"
+    [(visible)]="visibleDialog"
+  >
+    <span class="p-text-secondary block mb-8">Update your information.</span>
+    <div class="flex items-center gap-4 mb-4">
+      <label for="username" class="font-semibold w-24">Username</label>
+      <input pInputText id="username" class="flex-auto" autocomplete="off" />
+    </div>
+    <div class="flex items-center gap-4 mb-8">
+      <label for="email" class="font-semibold w-24">Email</label>
+      <input pInputText id="email" class="flex-auto" autocomplete="off" />
+    </div>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancel" severity="secondary" (click)="visibleDialog = false" />
+      <p-button label="Save" (click)="visibleDialog = false" />
+    </div>
+  </p-dialog> -->
+  <p-dialog header="Sign up" [modal]="true" [(visible)]="visibleDialog">
+    <form class="h-auto overflow-visible" action="">
+      <p-float-label variant="in" class="h-auto overflow-visible fs-6 mb-4"
+        ><input class="h-auto" pInputText type="text" name="username" />
+        <label for="username" class="label-username">Username</label>
+      </p-float-label>
+      <p-float-label variant="in" class="h-auto overflow-visible fs-6"
+        ><input class="h-auto" pInputText autocomplete="bday-month" type="text" name="password" />
+        <label for="password" class="label-password">Password</label>
+      </p-float-label>
+      <div class="d-flex g-2 justify-content-around mt-5">
+        <p-button severity="success" label="Sign up!"></p-button>
+        <p-button severity="secondary" label="Cancel"></p-button>
+      </div>
+    </form>
+  </p-dialog>
   <!--! NAV -->
   <app-navbar (user)="onUserChange($event)"></app-navbar>
   <p-drawer> </p-drawer>
@@ -11,7 +61,7 @@
           <img
             [class.img-pfp--active]="true"
             class="img-pfp rounded-circle"
-            src="/{{ user().profilePic }}"
+            src="{{ user().pfp_url }}"
             alt=""
           />
         </div>
@@ -25,10 +75,10 @@
               <span class="span-stats w-100 fs-5"
                 >followers:<span>{{ user().followers }}</span> following:
                 <span>{{ user().following }}</span> posts:
-                <span>{{ user().posts?.length }}</span></span
+                <span>{{ user().posts?.length || '0' }}</span></span
               >
               <!--! Bio  -->
-              <span class="fs-5">{{ user().description }}</span>
+              <span class="fs-5">{{ user().bio }}</span>
             </div>
           </div>
           <!--! Action Buttons  -->
@@ -38,7 +88,7 @@
               size="large"
               label="Follow"
               [label]="follow() ? 'UnFollow' : 'Follow'"
-              (onClick)="onClick()"
+              (onClick)="onFollowClick()"
               [icon]="follow() ? '' : 'pi pi-plus'"
               [severity]="follow() ? 'secondary' : 'success'"
             />
