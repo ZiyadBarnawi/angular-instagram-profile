@@ -19,6 +19,7 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: CustomLaraPreset,
       },
+      ripple: true,
     }),
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),

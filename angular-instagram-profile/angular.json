@@ -102,7 +102,7 @@
             "localDevelopment": {
               "buildTarget": "angular-instagram-profile:build:localDevelopment"
             },
-            "test:": { "buildTarget": "angular-instagram-profile:build:testServe" }
+            "test:": { "buildTarget": "angular-instagram-profile:build:test" }
           },
           "defaultConfiguration": "development"
         },

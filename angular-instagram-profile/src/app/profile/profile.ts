@@ -8,14 +8,22 @@ import { MessageModule, Message } from 'primeng/message';
 import { DialogModule, Dialog } from 'primeng/dialog';
 import { FloatLabelModule, FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Http } from '../services/http';
 import { User } from '../models/user.model';
 import { Images } from '../models/images.enum';
 import { Users } from '../Data/users';
 import { environment } from './../../environments/environment';
 import { TextareaModule, Textarea } from 'primeng/textarea';
+import { ConfirmDialogModule, ConfirmDialog } from 'primeng/confirmdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { FocusTrapModule, FocusTrap } from 'primeng/focustrap';
 import { Observable } from 'rxjs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // For animations that occur on page-load
+import { animate, trigger, state, style, transition } from '@angular/animations';
+import { AvatarModule, Avatar } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { RippleModule } from 'primeng/ripple';
 @Component({
   selector: 'app-profile',
   imports: [
@@ -30,6 +38,19 @@ import { Observable } from 'rxjs';
     InputTextModule,
     ReactiveFormsModule,
     Textarea,
+
+    AvatarModule,
+    Avatar,
+    AvatarGroupModule,
+    RippleModule,
+  ],
+  animations: [
+    trigger('hover', [
+      state('mouseover', style({ transform: 'scale(1.5)' })),
+      state('mouseout', style({ transform: 'scale(1)' })),
+      transition('mouseout => mouseover', [animate(200)]),
+      transition('mouseover => mouseouts', [animate(200)]),
+    ]),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   standalone: true,
@@ -39,31 +60,65 @@ import { Observable } from 'rxjs';
 export class Profile implements OnInit {
   http = inject(Http);
   form = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
-    bio: new FormControl(''),
-  });
+    username: new FormControl('', { validators: [Validators.maxLength(20)] }),
+    password: new FormControl('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(5),
+        (control) => {
+          console.log(
+            this.form?.controls?.username?.value === this.form?.controls?.password?.value
+          );
 
-  stories = signal<[{ src: string }]>([{ src: 'sunnyDay.jpg' }]);
-  follow = signal<boolean>(false);
-  showMessage = signal<boolean>(false);
+          if (this.form?.controls?.username?.value === this.form?.controls?.password?.value) {
+            this.usernameAndPasswordAreEqual = true;
+            return { usernameAndPasswordAreEquals: true };
+          } else {
+            this.usernameAndPasswordAreEqual = false;
+            return null;
+          }
+        },
+      ],
+    }),
+    bio: new FormControl('', { validators: [Validators.maxLength(100)] }),
+  });
   user = signal<User>(
     localStorage.getItem('users')
       ? JSON.parse(localStorage.getItem('users') as string)[0]
       : Users[0]
   );
+
+  stories = signal<[{ src: string }]>([{ src: 'sunnyDay.jpg' }]);
+  follow = signal<boolean>(false);
+  messageVisible = signal<boolean>(false);
+
+  usernameAndPasswordAreEqual = false;
+  hovered = false;
+  message = '';
   visibleRegisterDialog = false;
   visibleEditDialog = false;
+  visibleDeleteDialog = false;
+  messageSeverity = 'success';
 
   onUserChange(user: any): void {
     this.user.set(user);
   }
   onFollowClick(): void {
-    this.showMessage.set(true);
-
+    this.messageVisible.set(true);
     this.follow.set(!this.follow());
+    this.showMessage(this.follow() ? 'Followed!' : 'Un-Followed', {
+      success: this.follow(),
+      severity: this.follow() ? 'success' : 'danger',
+    });
+  }
+
+  showMessage(message: string, options = { success: true, severity: 'success' }) {
+    this.messageVisible.set(true);
+    this.message = message;
+    this.messageSeverity = options.severity;
     setTimeout(() => {
-      this.showMessage.set(false);
+      this.messageVisible.set(false);
+      this.messageSeverity = 'success';
     }, 1500);
   }
   onFormSubmit(): void {
@@ -72,19 +127,36 @@ export class Profile implements OnInit {
       password: this.form.controls.password.value!,
       pfp_url: Images[1],
     };
+
     this.http.register(user);
+    this.showMessage('success');
   }
   async onEditClick() {
-    const user = await this.http.edit({
-      username: this.user().username,
+    let data = await this.http.editUser({
+      username: this.user()!.username,
       bio: this.form.controls.bio.value,
+      // pfp_url: Images[Math.floor(Math.random() * 5)],
     } as User);
-    if (!user) return;
-    if (typeof user === typeof Users) this.user.set(user as User);
-    if (typeof user === typeof Object)
-      //TODO: finish this for the API
-      user as Observable<Object>;
-    this.user.set(user as User);
+    if (!data) return;
+
+    // in spring dev
+    if (environment.production) {
+      data = data as Observable<Object>;
+      data.subscribe((user: any) => {
+        this.user.set(user.data);
+      });
+      this.showMessage('Success');
+    }
+    // in local dev
+    else {
+      this.user.set(data as User);
+      this.showMessage('Success');
+    }
+  }
+
+  async onDeleteClick() {
+    this.http.deleteUser(this.user()!.username);
+    this.user.set({ username: '', pfp_url: '', bio: '' });
   }
   async ngOnInit(): Promise<void> {
     console.log(environment);

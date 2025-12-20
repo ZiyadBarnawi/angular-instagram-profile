@@ -1,19 +1,129 @@
 <!-- <section class=" "> -->
 <div class="d-flex justify-content-between w-100">
-  <!--! Follow Message-->
-  @if(showMessage()){
+  <!--!Message-->
+  @if(messageVisible()){
   <p-message
     class="position-absolute"
     [life]="1500"
-    [severity]="follow() ? 'success' : 'error'"
+    [severity]="messageSeverity"
     [size]="'large'"
-    >@if(follow()){ Followed!} @else{Unfollowed}</p-message
+    >{{ message }}</p-message
   >}
   <p-button
     class="p-button-dialog position-absolute"
     (click)="visibleRegisterDialog = true"
     label="Sign up"
   />
+
+  <!--! NAV -->
+  <app-navbar (user)="onUserChange($event)"></app-navbar>
+  <p-drawer> </p-drawer>
+  <section class="w-100 d-flex justify-content-center">
+    @if(user()){
+    <div class="d-flex flex-column w-75 gap-5">
+      <div class="div-profile-head d-flex align-items-center">
+        <!--! Profile Pic -->
+        <div class="div-profile-picture-container">
+          <!-- <img
+            [class.img-pfp--active]="true"
+            class="img-pfp rounded-circle"
+            src="{{ user().pfp_url || 'sunnyDay.jpg' }}"
+            alt=""
+          /> -->
+          <p-avatar
+            image="{{ user().pfp_url || 'sunnyDay.jpg' }}"
+            class="mr-2"
+            size="xlarge"
+            shape="circle"
+          />
+        </div>
+        <!--! Profile Details -->
+        <div class="div-profile-details">
+          <div class="d-flex w-100">
+            <div class="div-profile-states d-flex flex-column gap-3 w-100">
+              <!--! Username -->
+
+              <h1 [@hover]="hovered ? 'mouseover' : 'mouseout'" class="span-username w-100">
+                {{ user().username }}
+                <!--! Edit icon  -->
+
+                <!--! Delete icon  -->
+
+                <span (click)="visibleEditDialog = true" class="pi pi-user-edit"></span>
+                <span (click)="visibleDeleteDialog = true" class="pi pi-trash"></span>
+              </h1>
+              <!--! Account follow numbers  -->
+
+              <span class="span-stats w-100 fs-5"
+                >followers:<span>{{ user().followers || 0 }}</span> following:
+                <span>{{ user().following || 0 }} </span> posts:
+                <span>{{ user().posts?.length || '0' }}</span></span
+              >
+              <!--! Bio  -->
+              <span class="fs-5">{{ user().bio }}</span>
+            </div>
+          </div>
+          <!--! Action Buttons  -->
+          <div class="div-action-button my-3">
+            <p-button
+              class=""
+              size="large"
+              label="Follow"
+              [label]="follow() ? 'UnFollow' : 'Follow'"
+              (onClick)="onFollowClick()"
+              [icon]="follow() ? '' : 'pi pi-plus'"
+              [severity]="follow() ? 'secondary' : 'success'"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!--! Stories -->
+      <div class="div-stories d-flex gap-5 overflow-x-scroll overflow-y-visible">
+        @for (storyCoverImage of user().stories; track $index) {
+
+        <img class="img-story rounded-circle" src="/{{ storyCoverImage }}" alt="" />
+        }
+        <!--! Posts  -->
+      </div>
+      <app-posts [user]="user()"></app-posts>
+    </div>
+    }
+  </section>
+
+  <!--! Dialogs  -->
+
+  <!--! Edit Dialog  -->
+  <p-dialog header="Edit" [modal]="true" [(visible)]="visibleEditDialog">
+    <form [formGroup]="form" class="h-auto overflow-visible" action="">
+      <p-float-label variant="in" class="h-auto overflow-visible fs-6">
+        <textarea
+          pSize="large"
+          [formControl]="form.controls.bio"
+          class="h-auto"
+          pTextarea
+          type="bio"
+          name="bio"
+        ></textarea>
+        <label for="bio" class="label-bio">Bio</label>
+      </p-float-label>
+      <div class="d-flex g-2 justify-content-around mt-5">
+        <p-button
+          severity="success"
+          (onClick)="visibleEditDialog = false"
+          (onClick)="onEditClick()"
+          label="Edit"
+        ></p-button>
+        <p-button
+          severity="secondary"
+          (onClick)="visibleEditDialog = false"
+          label="Cancel"
+        ></p-button>
+      </div>
+    </form>
+  </p-dialog>
+
+  <!--! Sign up dialog -->
 
   <p-dialog header="Sign up" [modal]="true" [(visible)]="visibleRegisterDialog">
     <form [formGroup]="form" class="h-auto overflow-visible" action="">
@@ -38,7 +148,12 @@
         <label for="password" class="label-password">Password</label>
       </p-float-label>
       <div class="d-flex g-2 justify-content-around mt-5">
-        <p-button severity="success" (onClick)="onFormSubmit()" label="Sign up!"></p-button>
+        <p-button
+          severity="success"
+          (onClick)="visibleRegisterDialog = false"
+          (onClick)="onFormSubmit()"
+          label="Sign up!"
+        ></p-button>
         <p-button
           severity="secondary"
           (onClick)="visibleRegisterDialog = false"
@@ -47,91 +162,16 @@
       </div>
     </form>
   </p-dialog>
-  <!--! NAV -->
-  <app-navbar (user)="onUserChange($event)"></app-navbar>
-  <p-drawer> </p-drawer>
-  <section class="w-100 d-flex justify-content-center">
-    <div class="d-flex flex-column w-75 gap-5">
-      <div class="div-profile-head d-flex align-items-center">
-        <!--! Profile Pic -->
-        <div class="div-profile-picture-container">
-          <img
-            [class.img-pfp--active]="true"
-            class="img-pfp rounded-circle"
-            src="{{ user().pfp_url }}"
-            alt=""
-          />
-        </div>
-        <!--! Profile Details -->
-        <div class="div-profile-details">
-          <div class="d-flex w-100">
-            <div class="div-profile-states d-flex flex-column gap-3 w-100">
-              <!--! Username -->
-              <p-dialog header="Edit" [modal]="true" [(visible)]="visibleEditDialog">
-                <form [formGroup]="form" class="h-auto overflow-visible" action="">
-                  <p-float-label variant="in" class="h-auto overflow-visible fs-6">
-                    <textarea
-                      pSize="large"
-                      [formControl]="form.controls.bio"
-                      class="h-auto"
-                      pTextarea
-                      type="bio"
-                      name="bio"
-                    ></textarea>
-                    <label for="bio" class="label-bio">Bio</label>
-                  </p-float-label>
-                  <div class="d-flex g-2 justify-content-around mt-5">
-                    <p-button
-                      severity="success"
-                      (onClick)="visibleEditDialog = false"
-                      (onClick)="onEditClick()"
-                      label="Edit"
-                    ></p-button>
-                    <p-button
-                      severity="secondary"
-                      (onClick)="visibleEditDialog = false"
-                      label="Cancel"
-                    ></p-button>
-                  </div>
-                </form>
-              </p-dialog>
-              <h1 class="span-username w-100">
-                {{ user().username }}
-                <span (click)="visibleEditDialog = true" class="pi pi-user-edit"></span>
-              </h1>
-              <!--! Account numbers  -->
-              <span class="span-stats w-100 fs-5"
-                >followers:<span>{{ user().followers }}</span> following:
-                <span>{{ user().following }}</span> posts:
-                <span>{{ user().posts?.length || '0' }}</span></span
-              >
-              <!--! Bio  -->
-              <span class="fs-5">{{ user().bio }}</span>
-            </div>
-          </div>
-          <!--! Action Buttons  -->
-          <div class="div-action-button my-3">
-            <p-button
-              class=""
-              size="large"
-              label="Follow"
-              [label]="follow() ? 'UnFollow' : 'Follow'"
-              (onClick)="onFollowClick()"
-              [icon]="follow() ? '' : 'pi pi-plus'"
-              [severity]="follow() ? 'secondary' : 'success'"
-            />
-          </div>
-        </div>
-      </div>
-      <!--! Stories -->
-      <div class="div-stories d-flex gap-5 overflow-x-scroll overflow-y-visible">
-        @for (storyCoverImage of user().stories; track $index) {
-
-        <img class="img-story rounded-circle" src="/{{ storyCoverImage }}" alt="" />
-        }
-        <!--! Posts  -->
-      </div>
-      <app-posts [user]="user()"></app-posts>
+  <!--! Delete dialog  -->
+  <p-dialog [size] [modal]="true" [(visible)]="visibleDeleteDialog" header="Are you sure?">
+    <div class="d-flex gap-4">
+      <p-button
+        severity="danger"
+        (onClick)="visibleDeleteDialog = false"
+        (onClick)="onDeleteClick()"
+        >Delete</p-button
+      >
+      <p-button severity="secondary" (onClick)="visibleDeleteDialog = false">Cancel</p-button>
     </div>
-  </section>
+  </p-dialog>
 </div>

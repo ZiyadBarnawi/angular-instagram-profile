@@ -24,7 +24,7 @@
 
 .div-profile-details {
   margin-left: 5rem;
-  width: 100%;
+  width: auto;
   flex: 0 0 auto;
 }
 .div-stories {
@@ -32,9 +32,6 @@
   overflow-x: scroll;
 }
 
-:host ::ng-deep .p-button-lg {
-  width: 100%;
-}
 .div-action-button {
   width: 20rem;
 }
@@ -58,25 +55,35 @@ p-message {
   right: 0;
   /* margin: 2rem; */
 }
-:host ::ng-deep .p-button-dialog button {
-  padding: 0.5rem 2rem;
-  margin-right: 2rem;
-  background-color: rgba(17, 16, 16, 0.822);
-}
-:host ::ng-deep .pi-user-edit {
-  font-size: 2.2rem;
-  padding-left: 2rem;
-  cursor: pointer;
-  transition: 200ms;
-}
-:host ::ng-deep .pi-user-edit:hover {
-  /* font-size: 2.4rem; */
-  transform: scale(1.1);
+
+p-avatar {
+  border: green solid 0.2rem;
+  width: 15rem;
+  height: 15rem;
+  padding: 0.2rem;
 }
 .label-username,
 .label-password {
   font-size: 1.4rem;
 }
-p-dialog {
-  background-color: rgb(15, 14, 14);
+
+:host ::ng-deep .p-button-lg {
+  width: 100%;
+}
+:host ::ng-deep .p-button-dialog button {
+  padding: 0.5rem 2rem;
+  margin-right: 2rem;
+  background-color: rgba(17, 16, 16, 0.822);
+}
+:host ::ng-deep .pi-user-edit,
+:host ::ng-deep .pi-trash {
+  font-size: 2.2rem;
+  padding-left: 2rem;
+  cursor: pointer;
+  transition: 200ms;
+}
+:host ::ng-deep .pi-user-edit:hover,
+:host ::ng-deep .pi-trash:hover {
+  /* font-size: 2.4rem; */
+  transform: scale(1.1);
 }

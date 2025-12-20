@@ -11,37 +11,40 @@ import { Images } from '../models/images.enum';
 })
 export class Http {
   http = inject(HttpClient);
-  async getUsers(username?: number) {
+  async getUsers(
+    username?: string
+  ): Promise<Observable<Object> | Promise<User[]> | Promise<User> | null> {
+    // Spring environment
     if (environment?.production) {
       return this.http.get(`${environment?.apiUrl}/api/v1/users${username ? `/${username}` : ''}`, {
         headers: { 'ngrok-skip-browser-warning': 'true' },
-        timeout: 2000,
+        timeout: 20000,
       });
-    } else {
+    }
+    //Local environment
+    else {
+      if (username)
+        return (JSON.parse(localStorage.getItem('users') as string) as User[]).find(
+          (user) => user.username === username
+        ) as User;
+
       return JSON.parse(localStorage.getItem('users') as string) as User[];
     }
-
-    // this.http
-    //   .get('http://192.168.7.58:8080/api/v1/users', {
-    //     headers: { 'ngrok-skip-browser-warning': 'true' },
-    //   })
-    //   .subscribe({
-    //     next: (data) => console.log(data),
-    //     error: (err) => console.error(err),
-    //   });
   }
   async register(user: User): Promise<void> {
-    console.log(environment.production);
-
     if (environment.production) {
-      await this.http.post(`${environment?.apiUrl}/api/v1/users`, user, { timeout: 2000 });
+      this.http
+        .post(`${environment?.apiUrl}/api/v1/users`, user)
+        .pipe(
+          catchError((err) => {
+            throw err;
+          })
+        )
+        .subscribe((data) => {});
     } else {
       let users: any = localStorage.getItem('users');
       if (users) {
-        console.log(users);
-
         users = JSON.parse(users);
-        console.log(users);
         users.push(user);
 
         localStorage.setItem(`users`, JSON.stringify(users));
@@ -61,9 +64,15 @@ export class Http {
       }
     }
   }
-  async edit(newUser: User): Promise<User | Observable<Object> | null> {
+  async editUser(newUser: User): Promise<User | Observable<Object> | null> {
     if (environment.production) {
-      return await this.http.patch(`${environment.apiUrl}/users/${newUser.username}`, newUser);
+      return this.http
+        .patch(`${environment.apiUrl}/api/v1/users/${newUser.username}`, newUser)
+        .pipe(
+          catchError((err) => {
+            throw err;
+          })
+        );
     } else {
       let users = localStorage.getItem('users')
         ? (JSON.parse(localStorage.getItem('users') as string) as User[])
@@ -76,6 +85,17 @@ export class Http {
       users[oldUserIndex].username = newUser.username;
       localStorage.setItem('users', JSON.stringify(users));
       return users[oldUserIndex];
+    }
+  }
+  async deleteUser(username: string): Promise<void> {
+    if (environment.production) {
+      this.http.delete(`${environment.apiUrl}/api/v1/users/${username}`).subscribe((data) => {});
+    } else {
+      let users = JSON.parse(localStorage.getItem('users') as string) as User[];
+
+      const deletedUserIndex = users.findIndex((user) => user.username === username);
+      users.splice(deletedUserIndex, 1);
+      localStorage.setItem('users', JSON.stringify(users));
     }
   }
 }

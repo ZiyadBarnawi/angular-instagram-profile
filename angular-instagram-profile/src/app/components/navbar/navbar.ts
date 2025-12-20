@@ -69,14 +69,6 @@ export class Navbar {
     },
   ];
   async onSearch(searchWord: any): Promise<void> {
-    //! When the backend is down
-    // let users = Users;
-    // console.log(users);
-
-    // this.suggestedUsers = users.filter((user) =>
-    //   user.username.toLowerCase().includes(searchWord.query?.toLowerCase())
-    // ) as User[];
-    //! When the backend is up
     if (environment.production) {
       let users = (await this.http.getUsers()) as Observable<Object>;
       users
@@ -88,8 +80,6 @@ export class Navbar {
           })
         )
         .subscribe((data: any) => {
-          console.log(data);
-
           this.suggestedUsers = data.data.filter((user: any) =>
             user.username.toLowerCase().includes(searchWord.query?.toLowerCase())
           ) as User[];
@@ -101,7 +91,25 @@ export class Navbar {
       ) as User[];
     }
   }
-  onUserClick(user: any): void {
-    this.user.emit(user);
+
+  async onUserClick(user: User): Promise<void> {
+    let data = await this.http.getUsers(user.username);
+    console.log(data);
+
+    if (environment.production) {
+      data = data as Observable<Object>;
+      data
+        .pipe(
+          catchError((err) => {
+            throw err;
+          })
+        )
+        .subscribe((data: any) => {
+          this.user.emit(data);
+        });
+    } else {
+      data = data as User;
+      this.user.emit(data as User);
+    }
   }
 }
