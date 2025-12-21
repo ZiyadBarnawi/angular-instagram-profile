@@ -1,1 +1,7 @@
-<app-profile></app-profile>
+<!-- <app-profile></app-profile> -->
+<main class="d-flex">
+  <app-navbar (user)="onUserChange($event)"></app-navbar>
+  <p-drawer> </p-drawer>
+
+  <router-outlet></router-outlet>
+</main>

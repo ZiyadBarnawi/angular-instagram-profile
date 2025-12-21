@@ -8,7 +8,7 @@ import { MessageModule, Message } from 'primeng/message';
 import { DialogModule, Dialog } from 'primeng/dialog';
 import { FloatLabelModule, FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Http } from '../services/http';
 import { User } from '../models/user.model';
 import { Images } from '../models/images.enum';
@@ -18,12 +18,13 @@ import { TextareaModule, Textarea } from 'primeng/textarea';
 import { ConfirmDialogModule, ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { FocusTrapModule, FocusTrap } from 'primeng/focustrap';
-import { Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // For animations that occur on page-load
 import { animate, trigger, state, style, transition } from '@angular/animations';
 import { AvatarModule, Avatar } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { RippleModule } from 'primeng/ripple';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   imports: [
@@ -59,6 +60,7 @@ import { RippleModule } from 'primeng/ripple';
 })
 export class Profile implements OnInit {
   http = inject(Http);
+  router = inject(Router);
   form = new FormGroup({
     username: new FormControl('', { validators: [Validators.maxLength(20)] }),
     password: new FormControl('', {
@@ -66,10 +68,6 @@ export class Profile implements OnInit {
         Validators.required,
         Validators.minLength(5),
         (control) => {
-          console.log(
-            this.form?.controls?.username?.value === this.form?.controls?.password?.value
-          );
-
           if (this.form?.controls?.username?.value === this.form?.controls?.password?.value) {
             this.usernameAndPasswordAreEqual = true;
             return { usernameAndPasswordAreEquals: true };
@@ -82,6 +80,8 @@ export class Profile implements OnInit {
     }),
     bio: new FormControl('', { validators: [Validators.maxLength(100)] }),
   });
+  formArr = new FormArray([]);
+
   user = signal<User>(
     localStorage.getItem('users')
       ? JSON.parse(localStorage.getItem('users') as string)[0]
@@ -98,11 +98,11 @@ export class Profile implements OnInit {
   visibleRegisterDialog = false;
   visibleEditDialog = false;
   visibleDeleteDialog = false;
-  messageSeverity = 'success';
+  messageSeverity = 'Success';
 
-  onUserChange(user: any): void {
-    this.user.set(user);
-  }
+  // onUserChange(user: any): void {
+  //   this.user.set(user);
+  // }
   onFollowClick(): void {
     this.messageVisible.set(true);
     this.follow.set(!this.follow());
@@ -158,7 +158,31 @@ export class Profile implements OnInit {
     this.http.deleteUser(this.user()!.username);
     this.user.set({ username: '', pfp_url: '', bio: '' });
   }
+
   async ngOnInit(): Promise<void> {
-    console.log(environment);
+    this.router.events
+      .pipe(
+        catchError((err) => {
+          throw err;
+        })
+      )
+      .subscribe(async () => {
+        let data = await this.http.getUsers(this.router.url.substring(1));
+        if (environment.production) {
+          data = data as Observable<Object>;
+          data
+            .pipe(
+              catchError((err) => {
+                throw err;
+              })
+            )
+            .subscribe((data: any) => {
+              this.user.set(data.data);
+            });
+        } else {
+          data = data as User;
+          this.user.set(data);
+        }
+      });
   }
 }

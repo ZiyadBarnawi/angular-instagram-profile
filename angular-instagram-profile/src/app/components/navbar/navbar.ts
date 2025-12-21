@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, output } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, output, signal } from '@angular/core';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { Circle } from '../../shared/circle/circle';
@@ -13,11 +13,20 @@ import { Http } from '../../services/http';
 import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { RippleModule } from 'primeng/ripple';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MenuModule, Drawer, DrawerModule, AutoComplete, AutoCompleteModule, RippleModule],
+  imports: [
+    MenuModule,
+    Drawer,
+    DrawerModule,
+    AutoComplete,
+    AutoCompleteModule,
+    RippleModule,
+    RouterLink,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
@@ -29,12 +38,13 @@ export class Navbar {
   formControl = new FormControl();
   users: User[] = [];
   suggestedUsers: User[] = [{ username: '', pfp_url: Images[1] }];
-
+  routerUsername = signal<string>('');
   menuItems: MenuItem[] = [
     {
       label: 'Home',
       icon: 'pi pi-home',
       command: (): void => {},
+      routerLink: '/',
     },
     {
       label: 'Search',
@@ -47,26 +57,31 @@ export class Navbar {
       label: 'Explore',
       icon: 'pi pi-compass',
       command: (): void => {},
+      routerLink: 'explore',
     },
     {
       label: 'Reels',
       icon: 'pi pi-video',
       command: (): void => {},
+      routerLink: 'Reels',
     },
     {
       label: 'Messages',
       icon: 'pi pi-file',
       command: (): void => {},
+      routerLink: 'Messages',
     },
     {
       label: 'Post',
       icon: 'pi pi-send',
       command: (): void => {},
+      routerLink: 'Posts',
     },
     {
       label: 'Profile',
       icon: 'pi pi-user',
       command: (): void => {},
+      routerLink: this.routerUsername(),
     },
   ];
   async onSearch(searchWord: any): Promise<void> {
@@ -95,7 +110,7 @@ export class Navbar {
 
   async onUserClick(user: User): Promise<void> {
     let data = await this.http.getUsers(user.username);
-    console.log(data);
+    // console.log();
 
     if (environment.production) {
       data = data as Observable<Object>;
@@ -106,11 +121,14 @@ export class Navbar {
           })
         )
         .subscribe((data: any) => {
-          this.user.emit(data);
+          this.user.emit(data.data[0]);
+          this.routerUsername.set(data.data[0].username);
         });
     } else {
       data = data as User;
+
       this.user.emit(data as User);
+      this.routerUsername.set(data.username);
     }
   }
 }

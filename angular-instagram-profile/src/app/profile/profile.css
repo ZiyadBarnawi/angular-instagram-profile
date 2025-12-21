@@ -67,6 +67,10 @@ p-avatar {
   font-size: 1.4rem;
 }
 
+:host ::ng-deep p-dialog {
+  transform: scale(4.5rem);
+}
+
 :host ::ng-deep .p-button-lg {
   width: 100%;
 }

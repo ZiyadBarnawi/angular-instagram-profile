@@ -11,17 +11,19 @@
       <!-- TIP: ng-template is a tag not rendered by default, but when you instructs it to do so. -->
       <!-- TIP: PrimeNG has a set of templates ids (e.g.: #item) you cas specify to -->
       <ng-template class="m-4" #item let-suggestedUser>
-        <div (click)="onUserClick(suggestedUser)" class="div-suggested-user d-flex gap-1">
-          <div class="w-25 h-100 d-flex justify-content-center align-items-center">
-            <img
-              class="w-100 h-100 rounded-circle object-fit-cover"
-              src="{{ suggestedUser.pfp_url }}"
-              alt="pic"
-            />
+        <a routerLink="{{ suggestedUser.username }}">
+          <div (click)="onUserClick(suggestedUser)" class="div-suggested-user d-flex gap-1">
+            <div class="w-25 h-100 d-flex justify-content-center align-items-center">
+              <img
+                class="w-100 h-100 rounded-circle object-fit-cover"
+                src="{{ suggestedUser.pfp_url }}"
+                alt="pic"
+              />
+            </div>
+            <span class="span-search-username w-75">{{ suggestedUser.username }}</span>
           </div>
-          <span class="span-search-username w-75">{{ suggestedUser.username }}</span>
-        </div></ng-template
-      ></p-auto-complete
+        </a>
+      </ng-template></p-auto-complete
     >
   </p-drawer>
 </nav>
