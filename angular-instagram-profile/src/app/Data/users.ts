@@ -4,7 +4,7 @@ export let Users: User[] = [
   {
     username: 'Abdullah',
     bio: 'Learning spring boot, and drinking coffee.',
-    pfp_url: Images[1],
+    pfpUrl: Images[1],
     followers: 21,
     following: 171,
     posts: [
@@ -20,7 +20,7 @@ export let Users: User[] = [
   {
     username: 'Firas',
     bio: 'A new user to this site',
-    pfp_url: Images[3],
+    pfpUrl: Images[3],
     followers: 231,
     following: 111,
     posts: [
@@ -35,7 +35,7 @@ export let Users: User[] = [
   {
     username: 'Hamza',
     bio: 'Hello there👋👋 ',
-    pfp_url: Images[4],
+    pfpUrl: Images[4],
     followers: 251,
     following: 21,
     posts: [
@@ -54,7 +54,7 @@ export let Users: User[] = [
   {
     username: 'Rami',
     bio: 'Testing some stuff',
-    pfp_url: Images[1],
+    pfpUrl: Images[1],
     followers: 201,
     following: 18,
     posts: [
@@ -70,7 +70,7 @@ export let Users: User[] = [
   {
     username: 'Ziyad',
     bio: 'Building some PrimeNG stuff',
-    pfp_url: Images[2],
+    pfpUrl: Images[2],
     followers: 251,
     following: 17,
     posts: [
@@ -83,7 +83,7 @@ export let Users: User[] = [
   {
     username: 'Mohammad',
     bio: 'Testing some stuff',
-    pfp_url: Images[4],
+    pfpUrl: Images[4],
     followers: 211,
     following: 12,
     posts: [

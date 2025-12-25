@@ -37,7 +37,7 @@ export class Navbar {
   visible = false;
   formControl = new FormControl();
   users: User[] = [];
-  suggestedUsers: User[] = [{ username: '', pfp_url: Images[1], password: '123456' }];
+  suggestedUsers: User[] = [{ username: '', pfpUrl: Images[1], password: '123456' }];
   routerUsername = signal<string>('');
   menuItems: MenuItem[] = [
     {

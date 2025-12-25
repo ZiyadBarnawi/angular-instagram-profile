@@ -16,7 +16,7 @@ export class App {
   protected readonly title = signal('ElmerGram');
   user = signal<User>({
     username: 'Default',
-    pfp_url: Images[2],
+    pfpUrl: Images[2],
     bio: 'Default',
     password: '123456',
   });

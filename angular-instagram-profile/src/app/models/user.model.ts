@@ -4,11 +4,11 @@ export interface User {
   username: string;
   password: string;
   email?: string;
-  phone_number?: string;
+  phoneNumber?: string;
   gender?: string;
-  date_of_birth?: string;
+  dateOfBirth?: string;
   bio?: string;
-  pfp_url: string;
+  pfpUrl: string;
   followers?: number;
   following?: number;
   posts?: Post[];

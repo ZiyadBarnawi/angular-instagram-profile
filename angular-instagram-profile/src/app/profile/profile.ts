@@ -42,6 +42,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { TreeTableModule } from 'primeng/treetable';
 import { TableModule } from 'primeng/table';
 import { PopoverModule } from 'primeng/popover';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-profile',
@@ -64,6 +65,7 @@ import { PopoverModule } from 'primeng/popover';
     TableModule,
     Avatar,
     AvatarGroupModule,
+    CheckboxModule,
     InputMaskModule,
     RatingModule,
     PasswordModule,
@@ -99,14 +101,16 @@ export class Profile implements OnInit {
   router = inject(Router);
   today = new Date(Date.now());
   contactToggleOptions = ['Phone', 'Email'];
-  genderOptions = ['Male', 'Female']; // FIX: Check if it should follow <accountOptions> format
+  genderOptions = [
+    { label: 'Male', value: 'male' },
+    { label: 'female', value: 'female' },
+  ];
   accountOptions = [
     { label: 'Personal', value: 'personal' },
     { label: 'Business', value: 'business' },
   ];
   categories: string[] = ['Cloths', 'Glasses'];
   cities = [
-    'Riyadh',
     'Mecca',
     'Riyadh',
     'Asir',
@@ -124,7 +128,7 @@ export class Profile implements OnInit {
   uploadedFiles?: [{ name: string; size: string }];
   userForm = new FormGroup({
     username: new FormControl('', { validators: [Validators.maxLength(20)] }),
-    phone_number: new FormControl('', {
+    phoneNumber: new FormControl('', {
       validators: [
         Validators.minLength(8),
         (control) => {
@@ -162,20 +166,49 @@ export class Profile implements OnInit {
         },
       ],
     }),
-    products: new FormControl<[{ name: string; price: number; category: string }]>([
-      { name: 'Demo', price: 11, category: 'Demo' },
-    ]),
-    pfp_url: new FormControl<File[]>([], {}),
+
+    pfpUrl: new FormControl<File[]>([], {}),
     bio: new FormControl('', { validators: [Validators.maxLength(100)] }),
-    date_of_birth: new FormControl('', {}),
+    dateOfBirth: new FormControl('', {}),
     gender: new FormControl<'M' | 'F'>('M', { validators: [Validators.required] }),
     city: new FormControl('', { validators: [Validators.required] }),
-    commercial_paper: new FormControl(),
-    account_type: new FormControl<'personal' | 'business'>('personal', {
+    commercialPaper: new FormControl(),
+    commercialRegistryNumber: new FormControl(),
+    iban: new FormControl('', {
+      validators: [
+        (control) => {
+          console.log('In the validator');
+
+          if (this.userForm?.controls?.accountType?.value === 'business' && control.value === '')
+            return { nullIban: true };
+          return null;
+        },
+      ],
+    }),
+    accountType: new FormControl<'personal' | 'business'>('personal', {
       validators: [Validators.required],
     }),
-    paymentMethods: new FormControl(),
-    categories: new FormArray([], {}),
+    paymentMethods: new FormControl([], {
+      validators: [Validators.required],
+    }),
+    categories: new FormControl<[]>([], { validators: [Validators.nullValidator] }),
+    products: new FormArray([
+      new FormGroup({
+        name: new FormControl('Demo', {
+          validators: [
+            Validators.required,
+            Validators.minLength(0),
+            Validators.maxLength(75),
+            (control) => {
+              if (/^[a-zA-Z0-9_]*$/.test(control.value)) return null;
+              return { unexpectedCharacters: true };
+            },
+          ],
+        }),
+        price: new FormControl(0, { validators: [Validators.required, Validators.min(0)] }),
+        categories: new FormControl('', { validators: [Validators.required] }),
+      }),
+    ]),
   });
 
   user = signal<User>(
@@ -187,7 +220,6 @@ export class Profile implements OnInit {
   stories = signal<[{ src: string }]>([{ src: 'sunnyDay.jpg' }]);
   follow = signal<boolean>(false);
   messageVisible = signal<boolean>(false);
-
   usernameAndPasswordAreEqual = false;
   hovered = false;
   message = '';
@@ -196,9 +228,6 @@ export class Profile implements OnInit {
   visibleDeleteDialog = false;
   messageSeverity = 'Success';
 
-  // onUserChange(user: any): void {
-  //   this.user.set(user);
-  // }
   onFollowClick(): void {
     this.messageVisible.set(true);
     this.follow.set(!this.follow());
@@ -221,7 +250,7 @@ export class Profile implements OnInit {
     let user: User = {
       username: this.userForm.controls.username.value!,
       password: this.userForm.controls.password.value!,
-      pfp_url: Images[1],
+      pfpUrl: Images[1],
     };
 
     this.http.register(user);
@@ -231,7 +260,7 @@ export class Profile implements OnInit {
     let data = await this.http.editUser({
       username: this.user()!.username,
       bio: this.userForm.controls.bio.value,
-      // pfp_url: Images[Math.floor(Math.random() * 5)],
+      // pfpUrl: Images[Math.floor(Math.random() * 5)],
     } as User);
     if (!data) return;
 
@@ -249,16 +278,30 @@ export class Profile implements OnInit {
       this.showMessage('Success');
     }
   }
-  addNewItem() {
-    this.userForm.controls.products.value?.push({
-      name: 'New prod',
-      category: 'Demo 2',
-      price: 11,
-    });
+  onAddNewItem() {
+    console.log('Added');
+
+    this.userForm.controls.products.push(
+      new FormGroup({
+        name: new FormControl('Demo', {
+          validators: [
+            Validators.required,
+            Validators.minLength(0),
+            Validators.maxLength(75),
+            (control) => {
+              if (/^[a-zA-Z0-9_]*$/.test(control.value)) return null;
+              return { unexpectedCharacters: true };
+            },
+          ],
+        }),
+        price: new FormControl(0, { validators: [Validators.required, Validators.min(0)] }),
+        categories: new FormControl('', { validators: [Validators.required] }),
+      })
+    );
   }
   async onDeleteClick() {
     this.http.deleteUser(this.user()!.username);
-    this.user.set({ username: '', pfp_url: '', bio: '', password: '123456' });
+    this.user.set({ username: '', pfpUrl: '', bio: '', password: '123456' });
   }
   onCitySearch(event: any) {
     this.suggestedCities = this.cities.filter((_city) =>
@@ -266,7 +309,11 @@ export class Profile implements OnInit {
     );
   }
   onAccountTypeChange(event: any) {
-    this.userForm.controls.account_type.setValue(event.value.toLowerCase());
+    this.userForm.controls.accountType.setValue(event.value.toLowerCase());
+  }
+
+  onTestSub(): void {
+    console.log(this.userForm.value);
   }
   ngOnInit(): void {
     // FIX: still needs work
@@ -285,6 +332,8 @@ export class Profile implements OnInit {
     //       console.error(err);
     //     },
     //   });
+
+    console.log(this.userForm.controls.products.controls[0].controls.categories);
 
     this.router.events.subscribe(async () => {
       let data = await this.http.getUsers(this.router.url.substring(1));

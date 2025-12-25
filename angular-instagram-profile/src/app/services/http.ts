@@ -57,7 +57,7 @@ export class Http {
             {
               username: user.username,
               password: user.password,
-              pfp_url: Images[Math.floor(Math.random() * 5)],
+              pfpUrl: Images[Math.floor(Math.random() * 5)],
             } as User,
           ])
         );
