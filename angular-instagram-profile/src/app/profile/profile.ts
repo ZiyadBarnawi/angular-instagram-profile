@@ -100,7 +100,9 @@ export class Profile implements OnInit {
   http = inject(Http);
   router = inject(Router);
   today = new Date(Date.now());
+
   contactToggleOptions = ['Phone', 'Email'];
+  useEmail = true;
   genderOptions = [
     { label: 'Male', value: 'male' },
     { label: 'female', value: 'female' },
@@ -110,6 +112,8 @@ export class Profile implements OnInit {
     { label: 'Business', value: 'business' },
   ];
   categories: string[] = ['Cloths', 'Glasses'];
+  discounts: string[] = ['Random Discount'];
+  pricingOption = ['Fixed', 'Hourly', 'Negotiable'];
   cities = [
     'Mecca',
     'Riyadh',
@@ -135,9 +139,25 @@ export class Profile implements OnInit {
           if (/^[+-]?\d+$/.test(control.value)) return { notValidPhoneNumber: true };
           return null;
         },
+        (control) => {
+          if (!this.userForm?.controls?.email.value && !control?.value) {
+            return { NUllEmailAndPassword: true };
+          }
+          return null;
+        },
       ],
     }),
-    email: new FormControl('', { validators: [Validators.email] }),
+    email: new FormControl('', {
+      validators: [
+        Validators.email,
+        (control) => {
+          if (!this.userForm?.controls?.email.value && !control?.value) {
+            return { NUllEmailAndPassword: true };
+          }
+          return null;
+        },
+      ],
+    }),
     password: new FormControl('', {
       validators: [
         Validators.required,
@@ -146,10 +166,8 @@ export class Profile implements OnInit {
           if (
             this.userForm?.controls?.username?.value === this.userForm?.controls?.password?.value
           ) {
-            this.usernameAndPasswordAreEqual = true;
             return { usernameAndPasswordAreEquals: true };
           } else {
-            this.usernameAndPasswordAreEqual = false;
             return null;
           }
         },
@@ -177,8 +195,6 @@ export class Profile implements OnInit {
     iban: new FormControl('', {
       validators: [
         (control) => {
-          console.log('In the validator');
-
           if (this.userForm?.controls?.accountType?.value === 'business' && control.value === '')
             return { nullIban: true };
           return null;
@@ -191,7 +207,8 @@ export class Profile implements OnInit {
     paymentMethods: new FormControl([], {
       validators: [Validators.required],
     }),
-    categories: new FormControl<[]>([], { validators: [Validators.nullValidator] }),
+    category: new FormControl<string>('', { validators: [] }), // This is used to handle the new category
+    discount: new FormControl<string>('', { validators: [] }), // This is used to handle the new discount
     products: new FormArray([
       new FormGroup({
         name: new FormControl('Demo', {
@@ -200,13 +217,51 @@ export class Profile implements OnInit {
             Validators.minLength(0),
             Validators.maxLength(75),
             (control) => {
-              if (/^[a-zA-Z0-9_]*$/.test(control.value)) return null;
+              if (/^[a-zA-Z0-9_ ]*$/.test(control.value)) return null;
               return { unexpectedCharacters: true };
             },
           ],
         }),
         price: new FormControl(0, { validators: [Validators.required, Validators.min(0)] }),
         categories: new FormControl('', { validators: [Validators.required] }),
+        discounts: new FormControl<string[]>([], { validators: [Validators.maxLength(50)] }),
+      }),
+    ]),
+    workHours: new FormArray([
+      new FormControl<{ day: string; available: boolean; flexible: boolean }>({
+        day: 'Saturday',
+        available: false,
+        flexible: false,
+      }),
+      new FormControl<{ day: string; available: boolean; flexible: boolean }>({
+        day: 'Sunday',
+        available: false,
+        flexible: false,
+      }),
+      new FormControl<{ day: string; available: boolean; flexible: boolean }>({
+        day: 'Monday',
+        available: false,
+        flexible: false,
+      }),
+      new FormControl<{ day: string; available: boolean; flexible: boolean }>({
+        day: 'Tuesday',
+        available: false,
+        flexible: false,
+      }),
+      new FormControl<{ day: string; available: boolean; flexible: boolean }>({
+        day: 'Wednesday',
+        available: false,
+        flexible: false,
+      }),
+      new FormControl<{ day: string; available: boolean; flexible: boolean }>({
+        day: 'Thursday',
+        available: false,
+        flexible: false,
+      }),
+      new FormControl<{ day: string; available: boolean; flexible: boolean }>({
+        day: 'Friday',
+        available: false,
+        flexible: false,
       }),
     ]),
   });
@@ -220,7 +275,6 @@ export class Profile implements OnInit {
   stories = signal<[{ src: string }]>([{ src: 'sunnyDay.jpg' }]);
   follow = signal<boolean>(false);
   messageVisible = signal<boolean>(false);
-  usernameAndPasswordAreEqual = false;
   hovered = false;
   message = '';
   visibleRegisterDialog = false;
@@ -279,8 +333,6 @@ export class Profile implements OnInit {
     }
   }
   onAddNewItem() {
-    console.log('Added');
-
     this.userForm.controls.products.push(
       new FormGroup({
         name: new FormControl('Demo', {
@@ -296,6 +348,7 @@ export class Profile implements OnInit {
         }),
         price: new FormControl(0, { validators: [Validators.required, Validators.min(0)] }),
         categories: new FormControl('', { validators: [Validators.required] }),
+        discounts: new FormControl(this.discounts),
       })
     );
   }
@@ -315,6 +368,15 @@ export class Profile implements OnInit {
   onTestSub(): void {
     console.log(this.userForm.value);
   }
+
+  onNewCategory(): void {
+    this.categories.push(this.userForm.controls.category.value!);
+  }
+  onNewDiscount(): void {
+    console.log(this.userForm.controls.discount.value);
+
+    this.discounts.push(this.userForm.controls.discount.value!);
+  }
   ngOnInit(): void {
     // FIX: still needs work
     // this.router.events
@@ -332,8 +394,6 @@ export class Profile implements OnInit {
     //       console.error(err);
     //     },
     //   });
-
-    console.log(this.userForm.controls.products.controls[0].controls.categories);
 
     this.router.events.subscribe(async () => {
       let data = await this.http.getUsers(this.router.url.substring(1));

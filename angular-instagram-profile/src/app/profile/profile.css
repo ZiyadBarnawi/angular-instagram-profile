@@ -72,11 +72,11 @@ p-avatar {
   transform: scale(4.5rem);
 }
 
-:host ::ng-deep .p-inputwrapper,
-:host ::ng-deep .p-inputmask,
-:host ::ng-deep .p-datepicker-input,
-:host ::ng-deep .p-autocomplete-input,
-:host ::ng-deep .p-datepicker-input {
+:host ::ng-deep p-input-group .p-inputwrapper,
+:host ::ng-deep p-input-group .p-inputmask,
+:host ::ng-deep p-input-group .p-datepicker-input,
+:host ::ng-deep p-input-group .p-autocomplete-input,
+:host ::ng-deep p-input-group .p-datepicker-input {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   width: 100%;
@@ -103,4 +103,8 @@ p-avatar {
 }
 :host ::ng-deep .payment-radio {
   font-size: 1.4rem;
+}
+
+.date-picker-work-hours {
+  width: 10rem;
 }
