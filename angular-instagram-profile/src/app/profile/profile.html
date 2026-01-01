@@ -121,7 +121,11 @@
             }"
           >
           </p-fileupload>
-          <p-avatar [shape]="'circle'" [image]="user().pfpUrl" class="img-pfp my-4" />
+          <p-avatar
+            [shape]="'circle'"
+            [image]="user().pfpUrl || 'sunnyDay.jpg'"
+            class="img-pfp my-4"
+          />
         </div>
         <p-input-group class="p-2">
           <p-inputgroup-addon><i class="pi pi-user"></i> </p-inputgroup-addon>

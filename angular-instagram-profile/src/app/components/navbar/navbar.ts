@@ -8,7 +8,7 @@ import { AutoCompleteModule, AutoComplete } from 'primeng/autocomplete';
 import { Images } from '../../models/images.enum';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { User } from '../../models/user.model';
-import { Users } from '../../Data/users';
+import { Users } from '../../data/users';
 import { Http } from '../../services/http';
 import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -106,7 +106,7 @@ export class Navbar {
         });
     } else {
       this.users = (await this.http.getUsers()) as User[];
-      this.suggestedUsers = this.users.filter((user) =>
+      this.suggestedUsers = this.users?.filter((user) =>
         user.username.toLowerCase().includes(searchWord.query?.toLowerCase())
       ) as User[];
     }

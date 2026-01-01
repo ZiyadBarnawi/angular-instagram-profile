@@ -1,18 +1,21 @@
 import { inject, Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
-import { Users } from '../Data/users';
+import { Users } from '../data/users';
 import { environment } from '../../environments/environment';
 import { catchError, Observable } from 'rxjs';
 import { Images } from '../models/images.enum';
 import { FormGroup } from '@angular/forms';
-import { user } from './../Data/dummyUser';
+import { user } from '../data/dummyUser';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Http {
   http = inject(HttpClient);
+  GetJsonUser(): Observable<Object> {
+    return this.http.get('data/user.json');
+  }
   async getUsers(
     username?: string
   ): Promise<Observable<Object> | Promise<User[]> | Promise<User> | null> {
@@ -86,8 +89,6 @@ export class Http {
           })
         );
     } else {
-      console.log('in http');
-
       let users = localStorage.getItem('users')
         ? (JSON.parse(localStorage.getItem('users') as string) as User[])
         : null;
@@ -97,7 +98,6 @@ export class Http {
       if (oldUserIndex < 0) return null;
       users[oldUserIndex] = newUser;
       localStorage.setItem('users', JSON.stringify(users));
-      console.log(users[oldUserIndex]);
 
       return users[oldUserIndex];
     }

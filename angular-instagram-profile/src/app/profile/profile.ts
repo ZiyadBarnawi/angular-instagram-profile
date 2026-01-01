@@ -11,7 +11,7 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 import { Http } from '../services/http';
 import { User } from '../models/user.model';
 import { Images } from '../models/images.enum';
-import { Users } from '../Data/users';
+import { Users } from '../data/users';
 import { ToastModule, Toast } from 'primeng/toast';
 import { environment } from './../../environments/environment';
 import { catchError, filter, Observable, switchMap } from 'rxjs';
@@ -45,7 +45,7 @@ import { PopoverModule } from 'primeng/popover';
 import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
-import { user } from './../Data/dummyUser';
+import { user } from '../data/dummyUser';
 import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { Tooltip } from 'primeng/tooltip';
 import { StyleClassModule } from 'primeng/styleclass';
@@ -469,6 +469,11 @@ export class Profile implements OnInit {
         data = data as User;
         this.user.set(data);
       }
+    });
+    this.http.GetJsonUser().subscribe((data) => {
+      console.log(data);
+
+      this.user.set(data as User);
     });
   }
 }
