@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Profile } from './profile/profile.component';
-import { Navbar } from './components/navbar/navbar.component';
+import { ProfileComponent } from './profile/profile.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { User } from './models/user.model';
 import { Images } from './models/images.enum';
 import { Drawer, DrawerModule } from 'primeng/drawer';
@@ -11,7 +11,7 @@ import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, DrawerModule, Drawer],
+  imports: [RouterOutlet, NavbarComponent, DrawerModule, Drawer],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

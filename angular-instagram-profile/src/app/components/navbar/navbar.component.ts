@@ -1,14 +1,11 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, output, signal } from '@angular/core';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
-import { Circle } from '../../shared/circle/circle';
-import { Button } from 'primeng/button';
 import { Drawer, DrawerModule } from 'primeng/drawer';
 import { AutoCompleteModule, AutoComplete } from 'primeng/autocomplete';
 import { Images } from '../../models/images.enum';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { User } from '../../models/user.model';
-import { Users } from '../../data/users';
 import { Http } from '../../services/http.service';
 import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -35,7 +32,7 @@ import { InputGroupAddon, InputGroupAddonModule } from 'primeng/inputgroupaddon'
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class Navbar {
+export class NavbarComponent {
   user = output<User>();
   http = inject(Http);
   visible = false;
@@ -107,7 +104,7 @@ export class Navbar {
     } else {
       this.users = (await this.http.getUsers()) as User[];
       this.suggestedUsers = this.users?.filter((user) =>
-        user.username.toLowerCase().includes(searchWord.query?.toLowerCase())
+        user.username?.toLowerCase()?.includes(searchWord.query?.toLowerCase())
       ) as User[];
     }
   }

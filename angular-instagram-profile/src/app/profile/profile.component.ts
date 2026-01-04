@@ -1,5 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, input, OnInit, signal } from '@angular/core';
-import { Posts } from '../components/posts/posts.component';
+import { PostsComponent } from '../components/posts/posts.component';
 import { ButtonModule } from 'primeng/button';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule, Dialog } from 'primeng/dialog';
@@ -49,7 +49,7 @@ import { DatePipe } from '@angular/common';
     SelectButtonModule,
     StepperModule,
     ButtonModule,
-    Posts,
+    PostsComponent,
     InputGroupModule,
     StyleClassModule,
     InputGroupAddonModule,
@@ -99,7 +99,7 @@ import { DatePipe } from '@angular/common';
   styleUrl: './profile.component.css',
   providers: [MessageService],
 })
-export class Profile implements OnInit {
+export class ProfileComponent implements OnInit {
   http = inject(Http);
   router = inject(Router);
   messages = inject(MessageService);
@@ -159,6 +159,8 @@ export class Profile implements OnInit {
         },
         (control) => {
           if (!this.userForm?.controls?.email.value && !control?.value) {
+            console.log('This is the issue');
+
             return { NullEmailAndPassword: true };
           }
           return null;

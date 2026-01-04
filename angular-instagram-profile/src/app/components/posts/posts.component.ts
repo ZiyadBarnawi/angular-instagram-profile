@@ -1,15 +1,15 @@
 import { Component, input, signal } from '@angular/core';
 import { TabsModule, Tab, TabList } from 'primeng/tabs';
-import { Post } from '../post/post.component';
+import { PostComponent } from '../post/post.component';
 import { User } from '../../models/user.model';
 @Component({
   standalone: true,
   selector: 'app-posts',
-  imports: [TabsModule, Post],
+  imports: [TabsModule, PostComponent],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.css',
 })
-export class Posts {
+export class PostsComponent {
   randomNum = signal<number>(Math.floor(Math.random() * 7));
   user = input<User>();
   updateRandomValue(): void {

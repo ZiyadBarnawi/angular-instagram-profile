@@ -6,7 +6,7 @@ import { Post as PostModel } from '../../models/post.model';
   templateUrl: './post.component.html',
   styleUrl: './post.component.css',
 })
-export class Post {
+export class PostComponent {
   post = input<PostModel>();
   //The rest is for styling
   isHover = false;
