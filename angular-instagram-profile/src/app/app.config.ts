@@ -23,6 +23,7 @@ export const appConfig: ApplicationConfig = {
       },
       // ripple: true,
     }),
+    MessageService,
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),

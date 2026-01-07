@@ -9,7 +9,7 @@ import { Images } from '../../models/images.enum';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { User } from '../../models/user.model';
 import { Users } from '../../data/users';
-import { HttpService } from '../../services/http.service';
+import { UserService } from '../../services/user.service';
 import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { RippleModule } from 'primeng/ripple';
@@ -37,7 +37,7 @@ import { InputGroupAddon, InputGroupAddonModule } from 'primeng/inputgroupaddon'
 })
 export class Navbar {
   user = output<User>();
-  http = inject(HttpService);
+  http = inject(UserService);
   visible = false;
   formControl = new FormControl();
   users: User[] = [];

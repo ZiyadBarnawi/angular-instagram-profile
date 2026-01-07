@@ -1,6 +1,8 @@
 <main class="d-flex">
-  <app-navbar (user)="onUserChange($event)"></app-navbar>
-  <p-drawer> </p-drawer>
+  <p-toast />
 
-  <router-outlet></router-outlet>
+  <app-navbar />
+  <p-drawer />
+
+  <router-outlet />
 </main>

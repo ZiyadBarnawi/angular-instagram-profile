@@ -81,11 +81,11 @@ p-message {
   font-size: 2.4rem;
   z-index: 999999;
 }
-:host,
+/* :host,
 :host ::ng-deep .p-component,
 :host ::ng-deep .p-component::placeholder {
   font-size: 1.6rem;
-}
+} FIX: to be removed */
 :host ::ng-deep .p-message,
 :host ::ng-deep .p-message-content,
 :host ::ng-deep .p-message-text {
@@ -93,14 +93,15 @@ p-message {
   z-index: 9999;
   font-size: 2.4rem;
 }
-:host ::ng-deep input::placeholder {
+
+/* :host ::ng-deep input::placeholder {
   font-size: 1.4rem;
 }
 :host ::ng-deep .p-checkbox {
   transform: scale(1.5);
-}
+} FIX: to be removed */
 
-:host ::ng-deep p-input-group .p-inputwrapper,
+/* :host ::ng-deep p-input-group .p-inputwrapper,
 :host ::ng-deep p-input-group .p-inputmask,
 :host ::ng-deep p-input-group .p-datepicker-input,
 :host ::ng-deep p-input-group .p-autocomplete-input,
@@ -123,8 +124,10 @@ p-message {
 }
 :host ::ng-deep .p-button-lg {
   width: 100%;
-}
+} FIX: to be removed */
+
 :host ::ng-deep .p-button-dialog button {
+  font-size: 1.6rem;
   padding: 0.5rem 2rem;
   margin-right: 2rem;
   background-color: rgba(17, 16, 16, 0.822);

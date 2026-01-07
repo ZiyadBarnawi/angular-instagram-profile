@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, input, OnInit, signal } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Dialog } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { FormGroup } from '@angular/forms';
@@ -10,9 +10,6 @@ import { FormGroup } from '@angular/forms';
   styleUrl: './profile-dialog-component.css',
 })
 export class ProfileDialogComponent {
-  onShowEditDialog() {
-    throw new Error('Method not implemented.');
-  }
   onUpload($event: Event, arg1: any) {
     throw new Error('Method not implemented.');
   }
@@ -40,8 +37,4 @@ export class ProfileDialogComponent {
   form = input<FormGroup>();
   useEmail: any;
   modal = input(true);
-  // today: Date | null | undefined; transfer it to form
-  // genderOptions: any;
-  // suggestedCities: any;
-  // paymentMethodsOptions: any;
 }
