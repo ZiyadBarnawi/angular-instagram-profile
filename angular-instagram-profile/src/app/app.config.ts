@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import Lara from '@primeng/themes/lara';
+import '@angular/compiler';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -12,6 +13,7 @@ import { providePrimeNG } from 'primeng/config';
 import { CustomLaraPreset } from './customeLara.preset';
 import { provideHttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
+import { UserService } from './services/user.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +25,7 @@ export const appConfig: ApplicationConfig = {
       },
       // ripple: true,
     }),
+    UserService,
     MessageService,
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),

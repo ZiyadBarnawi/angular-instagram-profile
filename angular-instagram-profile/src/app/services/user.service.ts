@@ -5,10 +5,9 @@ import { environment } from '../../environments/environment';
 import { catchError, Observable } from 'rxjs';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { user } from '../data/dummyUser';
-import { MessageService, ToastMessageOptions } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { FileUploadEvent } from 'primeng/fileupload';
-import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 
 @Injectable({
   providedIn: 'root',
@@ -57,16 +56,7 @@ export class UserService {
   ];
   suggestedCities: string[] = [];
   uploadedFiles?: any[] = [];
-  otp = new FormControl<string>('', {
-    validators: [
-      Validators.required,
-      (control) => {
-        if (control.value.length < 4) return { invalidOtp: true };
-        if (control.value !== '0000') return { invalidOtp: true };
-        return null;
-      },
-    ],
-  });
+
   userForm = new FormGroup({
     username: new FormControl('', { validators: [Validators.maxLength(20)] }),
     phoneNumber: new FormControl('', {
@@ -230,6 +220,16 @@ export class UserService {
         closeHours: new FormControl(''),
       }),
     ]),
+    otp: new FormControl<string>('', {
+      validators: [
+        Validators.required,
+        (control) => {
+          if (control?.value?.length < 4) return { invalidOtp: true };
+          if (control.value !== '0000') return { invalidOtp: true };
+          return null;
+        },
+      ],
+    }),
   });
   GetJsonUser(): Observable<Object> {
     return this.http.get('data/user.json');
@@ -258,6 +258,9 @@ export class UserService {
   async addUser(): Promise<void> {
     let users: User[] = JSON.parse(localStorage.getItem('users') as string) as User[];
     if (users) {
+      delete this.userForm.value.otp;
+      delete this.userForm.value.confirmPassword;
+
       users.push(this.userForm.value as User);
       localStorage.setItem(`users`, JSON.stringify(users));
     }
@@ -298,10 +301,13 @@ export class UserService {
     //   }
     // }
   }
-  async editUser(username: string, newUser: User): Promise<User | Observable<Object> | null> {
+  async editUser(): Promise<User | Observable<Object> | null> {
     if (environment.production) {
       return this.http
-        .patch(`${environment.apiUrl}/api/v1/users/${newUser.username}`, newUser)
+        .patch(
+          `${environment.apiUrl}/api/v1/users/${this.userForm.value.username}`,
+          this.userForm.value
+        )
         .pipe(
           catchError((err) => {
             throw err;
@@ -313,11 +319,10 @@ export class UserService {
         : null;
 
       if (!users) return null;
-      let oldUserIndex = users.findIndex((user) => user.username === username);
+      let oldUserIndex = users.findIndex((user) => user.username === this.user()!.username);
       if (oldUserIndex < 0) return null;
-      users[oldUserIndex] = newUser;
+      users[oldUserIndex] = this.userForm.value as User;
       localStorage.setItem('users', JSON.stringify(users));
-
       return users[oldUserIndex];
     }
   }
@@ -332,41 +337,9 @@ export class UserService {
       localStorage.setItem('users', JSON.stringify(users));
     }
   }
-  showToast(toastOptions: ToastMessageOptions | ToastMessageOptions[], multi?: boolean): void {
-    if (multi) this.messagesService.addAll(toastOptions as ToastMessageOptions[]);
-    else this.messagesService.add(toastOptions as ToastMessageOptions);
-    //TIP: toastOptions:
-    // this.messages.add({
-    //   closable: false,
-    //   summary: 'Top short text',
-    //   detail: 'Long description',
-    //   severity: 'success',
-    //   life: 1500,
-    //   text: 'Text',
-    //   sticky: true,
-    // });
-  }
-  submitForm(): void {
-    const invalidForms = Object.entries(this.userForm.controls)
-      .filter(([_, control]) => control.invalid)
-      .map(([name]) => name);
-    if (invalidForms.length) {
-      this.showToast({
-        summary: `Some inputs are invalid`,
-        detail: invalidForms.join(', \n'),
-        severity: 'error',
-      });
-      this.userForm.reset();
-      return;
-    }
-
-    this.addUser();
-
-    this.showToast({ summary: 'Success' });
-  }
 
   async updateUser() {
-    let data = await this.editUser(this.user()!.username, this.userForm.value as User);
+    let data = await this.editUser();
     if (!data) return;
 
     // in spring dev
@@ -375,12 +348,10 @@ export class UserService {
       data.subscribe((user: any) => {
         this.user.set(user.data);
       });
-      this.showToast({ summary: 'Success' });
     }
     // in local dev
     else {
       this.user.set(data as User);
-      this.showToast({ summary: 'Success' });
     }
   }
   updateSuggestedCities(event: any) {
@@ -394,7 +365,10 @@ export class UserService {
     event.files.forEach((file: any) => filesCopy.push(URL.createObjectURL(file)));
     control.setValue(filesCopy);
   }
-
+  onDeleteClick() {
+    this.deleteUser(this.user()!.username);
+    this.user.set(null);
+  }
   disableWorkHours(control: FormControl): void {
     if (control.disabled) control.enable();
     else control.disable();

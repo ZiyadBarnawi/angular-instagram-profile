@@ -1,15 +1,15 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, signal } from '@angular/core';
-import { InputGroupAddon } from 'primeng/inputgroupaddon';
 import { ReactiveFormsModule } from '@angular/forms';
-import { InputGroup, InputGroupModule } from 'primeng/inputgroup';
-import { Button, ButtonModule } from 'primeng/button';
+
+import { InputGroupAddon } from 'primeng/inputgroupaddon';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { ButtonModule } from 'primeng/button';
 import { InputMaskModule } from 'primeng/inputmask';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CheckboxModule } from 'primeng/checkbox';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { UserService } from '../../services/user.service';
 import { DialogModule } from 'primeng/dialog';
 import { StepperModule } from 'primeng/stepper';
 import { PasswordModule } from 'primeng/password';
@@ -20,16 +20,17 @@ import { InputOtpModule } from 'primeng/inputotp';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { MessageService } from 'primeng/api';
+
+import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-profile-signup-dialog-component',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  standalone: true,
   imports: [
     InputGroupAddon,
     ReactiveFormsModule,
-    InputGroup,
-    Button,
     InputMaskModule,
     DatePickerModule,
     SelectButtonModule,
@@ -55,6 +56,7 @@ import { User } from '../../models/user.model';
     TextareaModule,
     InputOtpModule,
   ],
+
   templateUrl: './profile-signup-dialog-component.html',
   styleUrl: './profile-signup-dialog-component.css',
 })

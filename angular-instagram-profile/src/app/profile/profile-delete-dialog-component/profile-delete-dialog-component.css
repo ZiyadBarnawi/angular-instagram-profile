@@ -1,0 +1,5 @@
+:host ::ng-deep .p-button,
+:host ::ng-deep {
+  font-size: 1.4rem;
+  font-weight: 600;
+}

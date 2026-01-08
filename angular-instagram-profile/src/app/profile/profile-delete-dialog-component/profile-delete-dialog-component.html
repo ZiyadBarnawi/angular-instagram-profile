@@ -1,0 +1,17 @@
+<p-dialog [modal]="true" [(visible)]="userService.visibleDeleteDialog" header="Are you sure?">
+  <div class="d-flex gap-4">
+    <p-button
+      class="p-button"
+      severity="danger"
+      (onClick)="userService.visibleDeleteDialog = false"
+      (onClick)="userService.onDeleteClick()"
+      >Delete</p-button
+    >
+    <p-button
+      class="p-button"
+      severity="secondary"
+      (onClick)="userService.visibleDeleteDialog = false"
+      >Cancel</p-button
+    >
+  </div>
+</p-dialog>

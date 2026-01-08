@@ -1,0 +1,62 @@
+:host,
+:host ::ng-deep .p-component,
+:host ::ng-deep .p-component::placeholder {
+  font-size: 1.6rem;
+}
+:host ::ng-deep input::placeholder {
+  font-size: 1.4rem;
+}
+:host ::ng-deep .p-checkbox {
+  transform: scale(1.5);
+}
+
+:host ::ng-deep p-input-group .p-inputwrapper,
+:host ::ng-deep p-input-group .p-inputmask,
+:host ::ng-deep p-input-group .p-datepicker-input,
+:host ::ng-deep p-input-group .p-autocomplete-input,
+:host ::ng-deep p-input-group .p-datepicker-input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  width: 100%;
+}
+:host ::ng-deep .inputmask-credentials input,
+:host ::ng-deep .inputmask-credentials input:focus {
+  border: none;
+  height: 1.4rem;
+}
+
+:host ::ng-deep .p-datatable-header,
+:host ::ng-deep .p-datatable-thead,
+:host ::ng-deep .p-datatable-thead th {
+  background-color: transparent;
+  border: none;
+}
+:host ::ng-deep .p-button-lg {
+  width: 100%;
+}
+
+:host ::ng-deep .inputmask-credentials input {
+  height: 100% !important;
+}
+:host ::ng-deep p-inputmask {
+  padding: 0;
+}
+.img-pfp {
+  object-fit: cover;
+  width: 15rem;
+  height: 15rem;
+}
+
+:host ::ng-deep .fileupload-edit-pfp span {
+  padding: 0;
+}
+:host ::ng-deep .fileupload-edit-pfp .p-fileupload-choose-button {
+  border: none !important;
+}
+
+:host ::ng-deep .selectbutton-gender span {
+  font-size: 1.6rem;
+}
+:host ::ng-deep .date-picker-work-hours {
+  width: 10rem;
+}

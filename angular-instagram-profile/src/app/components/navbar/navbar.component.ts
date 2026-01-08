@@ -1,22 +1,20 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, output, signal } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
-import { Circle } from '../../shared/circle/circle';
-import { Button } from 'primeng/button';
 import { Drawer, DrawerModule } from 'primeng/drawer';
 import { AutoCompleteModule, AutoComplete } from 'primeng/autocomplete';
-import { Images } from '../../models/images.enum';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { User } from '../../models/user.model';
-import { Users } from '../../data/users';
-import { UserService } from '../../services/user.service';
-import { catchError, Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { RippleModule } from 'primeng/ripple';
-import { RouterLink } from '@angular/router';
-import { InputGroup, InputGroupModule } from 'primeng/inputgroup';
-import { InputGroupAddon, InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
+import { catchError, Observable } from 'rxjs';
+import { UserService } from '../../services/user.service';
+import { environment } from '../../../environments/environment';
+import { Images } from '../../models/images.enum';
+import { User } from '../../models/user.model';
 @Component({
   selector: 'app-navbar',
   standalone: true,

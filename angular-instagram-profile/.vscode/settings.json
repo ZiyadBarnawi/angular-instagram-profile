@@ -5,6 +5,7 @@
     "inputgroup",
     "inputnumber",
     "inputotp",
+    "primeng",
     "selectbutton"
   ],
   "FSharp.suggestGitignore": false

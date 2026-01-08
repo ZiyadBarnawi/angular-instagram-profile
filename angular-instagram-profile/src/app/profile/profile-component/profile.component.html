@@ -28,11 +28,11 @@
               <h1 class="span-username w-100">
                 {{ user()!.username }}
                 <!--! Edit icon  -->
+                <span (click)="userService.visibleEditDialog = true" class="pi pi-user-edit"></span>
 
                 <!--! Delete icon  -->
 
-                <span (click)="visibleEditDialog = true" class="pi pi-user-edit"></span>
-                <span (click)="visibleDeleteDialog = true" class="pi pi-trash"></span>
+                <span (click)="userService.visibleDeleteDialog = true" class="pi pi-trash"></span>
               </h1>
               <!--! Account follow numbers  -->
 
@@ -72,25 +72,11 @@
     </div>
     }
   </section>
-
   <!--! Dialogs  -->
-
   <!--! Edit Dialog  -->
-
-  <!-- <app-profile-edit-dialog-component /> FIX: -->
+  <app-profile-edit-dialog-component />
   <!--! Sign up dialog -->
   <app-profile-signup-dialog-component />
-
   <!--! Delete dialog  -->
-  <p-dialog [size] [modal]="true" [(visible)]="visibleDeleteDialog" header="Are you sure?">
-    <div class="d-flex gap-4">
-      <p-button
-        severity="danger"
-        (onClick)="visibleDeleteDialog = false"
-        (onClick)="onDeleteClick()"
-        >Delete</p-button
-      >
-      <p-button severity="secondary" (onClick)="visibleDeleteDialog = false">Cancel</p-button>
-    </div>
-  </p-dialog>
+  <app-profile-delete-dialog-component />
 </div>

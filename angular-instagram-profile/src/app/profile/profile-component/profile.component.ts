@@ -1,32 +1,27 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit, signal } from '@angular/core';
-import { Posts } from '../../components/posts/posts.component';
-import { ButtonModule } from 'primeng/button';
-import { Dialog } from 'primeng/dialog';
-import { User } from '../../models/user.model';
-import { ToastModule, Toast } from 'primeng/toast';
-import { environment } from '../../../environments/environment';
-import { AvatarModule, Avatar } from 'primeng/avatar';
-import { AvatarGroupModule } from 'primeng/avatargroup';
-import { Router } from '@angular/router';
-import { OverlayBadgeModule } from 'primeng/overlaybadge';
-import { MessageService } from 'primeng/api';
-import { UserService } from '../../services/user.service';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable, catchError } from 'rxjs';
+
+import { Button } from 'primeng/button';
+import { Avatar } from 'primeng/avatar';
+import { MessageService } from 'primeng/api';
+
+import { User } from '../../models/user.model';
+import { environment } from '../../../environments/environment';
 import { ProfileSignupDialogComponent } from '../profile-signup-dialog-component/profile-signup-dialog-component';
+import { ProfileEditDialogComponent } from '../profile-edit-dialog-component/profile-edit-dialog-component';
+import { ProfileDeleteDialogComponent } from '../profile-delete-dialog-component/profile-delete-dialog-component';
+import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-profile',
   imports: [
-    ButtonModule,
-    Posts,
-    Dialog,
-    AvatarModule,
+    Button,
     Avatar,
-    AvatarGroupModule,
-    OverlayBadgeModule,
-    ToastModule,
     ReactiveFormsModule,
     ProfileSignupDialogComponent,
+    ProfileEditDialogComponent,
+    ProfileDeleteDialogComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -38,10 +33,7 @@ export class Profile implements OnInit {
   userService = inject(UserService);
   userForm = this.userService.userForm;
   router = inject(Router);
-  messagesServices = inject(MessageService);
-  visibleEditDialog = this.userService.visibleEditDialog;
-  visibleDeleteDialog = this.userService.visibleDeleteDialog;
-  visibleSignupDialog = this.userService.visibleSignupDialog;
+  messagesService = inject(MessageService);
 
   user = this.userService.user;
 
@@ -54,21 +46,18 @@ export class Profile implements OnInit {
   onFollowClick(): void {
     this.messageVisible.set(true);
     this.isFollowed.set(!this.isFollowed());
-    this.userService.showToast({
+    this.messagesService.add({
       summary: this.isFollowed() ? 'Followed!' : 'Un-Followed',
       severity: this.isFollowed() ? 'success' : 'error',
     });
   }
 
-  onDeleteClick() {
-    this.userService.deleteUser(this.user()!.username);
-    this.user.set(null);
-  }
-
   ngOnInit(): void {
     this.userService.user.set(this.userService.getInitialUser());
     this.router.events.subscribe(async () => {
-      let data = await this.userService.getUsers(this.router.url.substring(1));
+      let data = await this.userService.getUsers(
+        this.router.url.substring(1).replaceAll('%20', ' ')
+      );
       console.log(data);
 
       if (environment.production) {

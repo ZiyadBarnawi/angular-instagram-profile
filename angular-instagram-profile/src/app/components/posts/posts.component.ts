@@ -1,7 +1,10 @@
 import { Component, input, signal } from '@angular/core';
-import { TabsModule, Tab, TabList } from 'primeng/tabs';
+
+import { TabsModule } from 'primeng/tabs';
+
 import { Post } from '../post/post.component';
-import { User } from '../../models/user.model';
+// import { User } from '../../models/user.model';
+import { User } from '../../components/index';
 @Component({
   standalone: true,
   selector: 'app-posts',
