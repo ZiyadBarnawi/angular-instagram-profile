@@ -13,7 +13,6 @@ export class Post {
   fade = signal<string>('fade');
   onMouseover(): void {
     console.log('mouse in');
-
     this.fade.set('');
   }
   onMouseout(): void {

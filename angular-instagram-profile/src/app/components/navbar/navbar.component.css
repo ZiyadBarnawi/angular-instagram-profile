@@ -1,19 +1,7 @@
-nav {
-  height: 90vh;
-  width: 20rem;
-}
-
 .span-search-username {
   font-size: 1.4rem;
 }
-.div-suggested-user {
-  pointer-events: all;
-}
-:host,
-:host ::ng-deep .p-component,
-:host ::ng-deep .p-component::placeholder {
-  font-size: 1.6rem;
-}
+
 :host ::ng-deep .p-menu {
   height: 100%;
   font-size: 2.2rem;
@@ -21,6 +9,7 @@ nav {
   background: transparent !important;
 }
 :host ::ng-deep .p-menu ul {
+  gap: 4rem;
   height: 50%;
   display: flex;
   flex-direction: column;
@@ -32,8 +21,8 @@ nav {
 }
 
 :host ::ng-deep .p-menu .p-menu-item-link {
-  margin-top: 2.8rem;
-  margin-bottom: 0.8rem;
+  /* margin-top: 2.8rem; */
+  /* margin-bottom: 0.8rem; */
 }
 
 :host ::ng-deep .p-drawer-left {
@@ -41,22 +30,30 @@ nav {
   background-color: rgb(21, 21, 21);
   border: transparent;
 }
-:host ::ng-deep .p-autocomplete-input,
-:host ::ng-deep .p-inputwrapper,
-:host ::ng-deep .p-autocomplete .p-component .p-inputwrapper,
-:host ::ng-deep .p-autocomplete-input {
-  width: 35rem;
+::ng-deep .p-drawer-left {
+  width: 40rem;
 }
-:host ::ng-deep .p-autocomplete-option {
-  pointer-events: all;
-}
-:host ::ng-deep .p-autocomplete-input,
-:host ::ng-deep .p-autocomplete {
+::ng-deep .auto-complete div input,
+::ng-deep .auto-complete div {
   width: 100%;
-  border-top-left-radius: none;
-  border-bottom-left-radius: none;
 }
 
-:host ::ng-deep .p-autocomplete-input {
-  width: 35rem;
+::ng-deep div.p-menu-item-content {
+  padding: 0.1rem 0.1rem;
+  border-radius: 1rem;
+}
+::ng-deep .span-search-username {
+  font-size: 2rem;
+}
+::ng-deep .div-suggested-user {
+  height: 5rem;
+}
+
+::ng-deep .avatar-pfp {
+  width: 6rem;
+  height: 6rem;
+}
+
+::ng-deep li.p-autocomplete-option {
+  pointer-events: all;
 }

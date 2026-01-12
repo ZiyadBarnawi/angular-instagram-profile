@@ -155,11 +155,11 @@
         <ng-template #content let-activateCallback="activateCallback">
           <div class="d-flex justify-content-center mb-5">
             <p-selectbutton
+              size="large"
               [multiple]="false"
               [options]="userService.accountOptions"
               [formControl]="userService.userForm.controls.accountType"
-              (onChange)="userService.onAccountTypeChange($event)"
-              class="m-2"
+              class="m-2 selectbutton-account-type"
             />
           </div>
 
@@ -219,6 +219,8 @@
                 accept="application/pdf"
                 maxFileSize="1000000"
                 mode="advanced"
+                [showUploadButton]="false"
+                [auto]="true"
                 (onUpload)="
                   userService.uploadFile($event, userService.userForm.controls.commercialPaper)
                 "
@@ -308,7 +310,7 @@
                       <p-input-group>
                         <p-inputgroup-addon
                           ><p-button
-                            (click)="userService.onNewCategory()"
+                            (click)="userService.addNewCategory()"
                             icon="pi pi-plus"
                           ></p-button
                         ></p-inputgroup-addon>
@@ -333,7 +335,7 @@
                       <p-input-group>
                         <p-inputgroup-addon
                           ><p-button
-                            (click)="userService.onNewDiscount()"
+                            (click)="userService.addNewDiscount()"
                             icon="pi pi-plus"
                           ></p-button
                         ></p-inputgroup-addon>
@@ -352,7 +354,7 @@
             <ng-template #footer>
               <div class="d-flex justify-content-start">
                 <p-button
-                  (onClick)="userService.onAddNewItem()"
+                  (onClick)="userService.addNewProduct()"
                   label="Add"
                   outlined="true"
                   icon="pi pi-plus"
@@ -376,7 +378,6 @@
                     size="large"
                     [formControl]="group.controls.available"
                     binary="true"
-                    (onChange)="userService.onDayCheck(group.controls.available, $event)"
                   ></p-checkbox>
                 </div>
                 <p-datepicker

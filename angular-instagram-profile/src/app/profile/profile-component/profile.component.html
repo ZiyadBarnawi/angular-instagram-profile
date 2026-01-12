@@ -1,9 +1,14 @@
 <div class="d-flex justify-content-between w-100">
-  <p-button
-    (onClick)="userService.visibleSignupDialog = true"
-    class="p-button-dialog position-absolute"
-    label="Sign up"
-  />
+  <a routerLink="signup" class="text-decoration-none">
+    <p-button
+      class="p-button-dialog position-absolute"
+      (onClick)="userService.visibleSignupDialog = true"
+      label="Sign up
+"
+    >
+    </p-button>
+  </a>
+
   <!--! NAV -->
   <!-- <app-navbar (user)="onUserChange($event)"></app-navbar> -->
   <section class="w-100 d-flex justify-content-center">
@@ -28,18 +33,25 @@
               <h1 class="span-username w-100">
                 {{ user()!.username }}
                 <!--! Edit icon  -->
-                <span (click)="userService.visibleEditDialog = true" class="pi pi-user-edit"></span>
-
+                <!-- <span (click)="userService.visibleEditDialog = true" class="pi pi-user-edit"></span> -->
+                <a
+                  (click)="userService.visibleEditDialog = true"
+                  routerLink="/profile/{{ user()?.username }}/edit"
+                >
+                  <i class="pi pi-user-edit"></i>
+                </a>
                 <!--! Delete icon  -->
 
-                <span (click)="userService.visibleDeleteDialog = true" class="pi pi-trash"></span>
+                <a class="text-decoration-none" routerLink="delete">
+                  <i (click)="userService.visibleDeleteDialog = true" class="pi pi-trash"></i>
+                </a>
               </h1>
               <!--! Account follow numbers  -->
 
-              <span class="span-stats w-100 fs-5"
-                >followers:<span>{{ user()!.followers || 0 }}</span> following:
-                <span>{{ user()!.following || 0 }} </span> posts:
-                <span>{{ user()!.posts?.length || '0' }}</span></span
+              <span class="span-stats w-100"
+                >Followers:<span>{{ user()!.followers || 0 }}</span> Following:
+                <span>{{ user()!.following || 0 }} </span> <br />
+                Posts: <span>{{ user()!.posts?.length || '0' }}</span></span
               >
               <!--! Bio  -->
               <span class="fs-5">{{ user()!.bio }}</span>
@@ -52,7 +64,7 @@
               size="large"
               label="Follow"
               [label]="isFollowed() ? 'UnFollow' : 'Follow'"
-              (onClick)="onFollowClick()"
+              (onClick)="toggleFollow()"
               [icon]="isFollowed() ? '' : 'pi pi-plus'"
               [severity]="isFollowed() ? 'secondary' : 'success'"
             />
@@ -68,15 +80,18 @@
         }
         <!--! Posts  -->
       </div>
-      <app-posts [user]="user()!"></app-posts>
+      <!-- <app-posts [user]="user()!" /> -->
+      <app-posts />
     </div>
     }
   </section>
   <!--! Dialogs  -->
   <!--! Edit Dialog  -->
-  <app-profile-edit-dialog-component />
+  <!-- <app-profile-edit-dialog-component /> -->
+
+  <router-outlet />
   <!--! Sign up dialog -->
-  <app-profile-signup-dialog-component />
+  <!-- <app-profile-signup-dialog-component /> -->
   <!--! Delete dialog  -->
-  <app-profile-delete-dialog-component />
+  <!-- <app-profile-delete-dialog-component /> -->
 </div>

@@ -3,5 +3,6 @@ export enum Images {
   'desert.jpg',
   'drops.jpg',
   'sunnyDay.jpg',
-  'rainnyCar.jpg',
+  'sunFlower.jpg',
+  'defaultAvatar.jpg',
 }

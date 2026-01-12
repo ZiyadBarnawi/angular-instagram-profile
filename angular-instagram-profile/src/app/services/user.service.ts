@@ -1,13 +1,14 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { catchError, Observable } from 'rxjs';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { user } from '../data/dummyUser';
+import { HttpClient } from '@angular/common/http';
+
+import { catchError, Observable } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { FileUploadEvent } from 'primeng/fileupload';
+
+// import { environment } from '../../environments/environment';
+// import { User } from '../models/user.model';
+import { Images, User, environment } from '../components/index';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class UserService {
   visibleSignupDialog = false;
   visibleDeleteDialog = false;
   user = signal<User | null>(null);
-
+  Images = Images;
   // testSignal = signal(0);
   // computedSignal = computed(() => this.testSignal()); //TIP: computed signals are read-only. They change whenever the other signal changes
   // computedSignal = this.testSignal.asReadonly(); //TIP: Same as code above, but leaner
@@ -29,7 +30,7 @@ export class UserService {
   useEmail = true;
   genderOptions = [
     { label: 'Male', value: 'M' },
-    { label: 'female', value: 'F' },
+    { label: 'Female', value: 'F' },
   ];
   accountOptions = [
     { label: 'Personal', value: 'personal' },
@@ -174,49 +175,49 @@ export class UserService {
         day: new FormControl<string>('Saturday'),
         available: new FormControl<boolean>(false),
         flexible: new FormControl<boolean>(false),
-        openHours: new FormControl(''),
+        openHours: new FormControl<string | undefined>(''),
         closeHours: new FormControl(''),
       }),
       new FormGroup({
         day: new FormControl<string>('Sunday'),
         available: new FormControl<boolean>(false),
         flexible: new FormControl<boolean>(false),
-        openHours: new FormControl(''),
+        openHours: new FormControl<string | undefined>(''),
         closeHours: new FormControl(''),
       }),
       new FormGroup({
         day: new FormControl<string>('Monday'),
         available: new FormControl<boolean>(false),
         flexible: new FormControl<boolean>(false),
-        openHours: new FormControl(''),
+        openHours: new FormControl<string | undefined>(''),
         closeHours: new FormControl(''),
       }),
       new FormGroup({
         day: new FormControl<string>('Tuesday'),
         available: new FormControl<boolean>(false),
         flexible: new FormControl<boolean>(false),
-        openHours: new FormControl(''),
+        openHours: new FormControl<string | undefined>(''),
         closeHours: new FormControl(''),
       }),
       new FormGroup({
         day: new FormControl<string>('Wednesday'),
         available: new FormControl<boolean>(false),
         flexible: new FormControl<boolean>(false),
-        openHours: new FormControl(''),
+        openHours: new FormControl<string | undefined>(''),
         closeHours: new FormControl(''),
       }),
       new FormGroup({
         day: new FormControl<string>('Thursday'),
         available: new FormControl<boolean>(false),
         flexible: new FormControl<boolean>(false),
-        openHours: new FormControl(''),
+        openHours: new FormControl<string | undefined>(''),
         closeHours: new FormControl(''),
       }),
       new FormGroup({
         day: new FormControl<string>('Friday'),
         available: new FormControl<boolean>(false),
         flexible: new FormControl<boolean>(false),
-        openHours: new FormControl(''),
+        openHours: new FormControl<string | undefined>(''),
         closeHours: new FormControl(''),
       }),
     ]),
@@ -247,10 +248,10 @@ export class UserService {
     }
     //Local environment
     else {
-      if (username)
-        return (JSON.parse(localStorage.getItem('users') as string) as User[]).find(
-          (user) => user.username === username
-        ) as User;
+      if (username) {
+        const users = JSON.parse(localStorage.getItem('users') as string) as User[];
+        return users?.find((_user) => _user.username === username) as User;
+      }
 
       return JSON.parse(localStorage.getItem('users') as string) as User[];
     }
@@ -323,6 +324,8 @@ export class UserService {
       if (oldUserIndex < 0) return null;
       users[oldUserIndex] = this.userForm.value as User;
       localStorage.setItem('users', JSON.stringify(users));
+      this.user.set(users[oldUserIndex]);
+
       return users[oldUserIndex];
     }
   }
@@ -338,22 +341,6 @@ export class UserService {
     }
   }
 
-  async updateUser() {
-    let data = await this.editUser();
-    if (!data) return;
-
-    // in spring dev
-    if (environment.production) {
-      data = data as Observable<Object>;
-      data.subscribe((user: any) => {
-        this.user.set(user.data);
-      });
-    }
-    // in local dev
-    else {
-      this.user.set(data as User);
-    }
-  }
   updateSuggestedCities(event: any) {
     this.suggestedCities = this.cities.filter((_city) =>
       _city.toLowerCase().includes(event.query.toLowerCase())
@@ -365,19 +352,7 @@ export class UserService {
     event.files.forEach((file: any) => filesCopy.push(URL.createObjectURL(file)));
     control.setValue(filesCopy);
   }
-  onDeleteClick() {
-    this.deleteUser(this.user()!.username);
-    this.user.set(null);
-  }
-  disableWorkHours(control: FormControl): void {
-    if (control.disabled) control.enable();
-    else control.disable();
-  }
-  getInitialUser(): User {
-    let users: string | null = localStorage.getItem('users');
-    if (users) return JSON.parse(localStorage.getItem('users') as string)[0];
-    else return user;
-  }
+
   updateUserForm(): void {
     Object.entries(this.userForm.controls).forEach((control) => {
       this.userForm.reset();
@@ -385,7 +360,7 @@ export class UserService {
     });
   }
 
-  onAddNewItem() {
+  addNewProduct() {
     this.userForm.controls.products.push(
       new FormGroup({
         name: new FormControl('Demo', {
@@ -407,17 +382,12 @@ export class UserService {
       })
     );
   }
-  onAccountTypeChange(event: any) {
-    this.userForm.controls.accountType.setValue(event.value.toLowerCase());
-  }
-  onNewCategory(): void {
+
+  addNewCategory(): void {
     this.categories.push(this.userForm.controls.newCategory.value!);
   }
-  onNewDiscount(): void {
+  addNewDiscount(): void {
     this.discounts.push(this.userForm.controls.newDiscount.value!);
-  }
-  onDayCheck(control: FormControl, event: CheckboxChangeEvent) {
-    control.setValue(event.checked);
   }
 
   get skipPersonalAccountStep(): boolean {

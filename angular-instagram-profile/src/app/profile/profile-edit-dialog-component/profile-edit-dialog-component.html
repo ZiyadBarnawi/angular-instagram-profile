@@ -63,7 +63,7 @@
           </svg>
         </p-button>
       </p-inputgroup-addon>
-      @if (userService.useEmail) {
+      @if (userService.userForm.value.email) {
 
       <input
         size="large"
@@ -71,7 +71,7 @@
         [formControl]="userService.userForm.controls.email"
         pInputText
         class="inputmask-credentials"
-        [placeholder]="userService.user()?.email"
+        [placeholder]="userService.user()?.email || ''"
       />
 
       }@else{
@@ -241,6 +241,7 @@
             class="date-picker-work-hours"
             [timeOnly]="true"
             [formControl]="group.controls.openHours"
+            [placeholder]="userService!.user()!.workHours![$index].openHours"
           >
             <ng-template #footer>
               <div class="d-flex gap-3">
@@ -274,6 +275,7 @@
         <i class="pi pi-search" (click)="userService.updateSuggestedCities($event)"></i>
       </p-inputgroup-addon>
       <p-autocomplete
+        [formControl]="userService.userForm.controls.city"
         [suggestions]="userService.suggestedCities"
         appendTo="body"
         placeholder="Select your city"
@@ -282,9 +284,13 @@
     </p-input-group>
     <div class="d-flex flex-column">
       <label for="bio">bio</label>
-      <textarea rows="5" cols="30" pTextarea></textarea>
+      <textarea
+        rows="5"
+        cols="30"
+        pTextarea
+        [formControl]="userService.userForm.controls.bio"
+      ></textarea>
     </div>
-
     }
     <div class="d-flex g-2 justify-content-center gap-5 my-5">
       <p-button

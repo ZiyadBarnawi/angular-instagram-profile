@@ -4,7 +4,8 @@
   "email": "Ziyad@mail.com",
   "password": "Ziyad12",
   "pfpUrl": "snowflake.webp",
-
+  "followers": 1,
+  "following": 50,
   "bio": "",
   "dateOfBirth": "2025-12-10T21:00:00.000Z",
   "gender": "M",
@@ -14,7 +15,13 @@
   "iban": "121212",
   "accountType": "business",
   "paymentMethods": ["stcPay", "Mada", "googlePay"],
-
+  "posts": [
+    { "imgSrc": "sunnyDay.jpg", "likesCount": 13 },
+    { "imgSrc": "desert.jpg", "likesCount": 13 },
+    { "imgSrc": "sunFlower.jpg", "likesCount": 13 },
+    { "imgSrc": "carbet.jpg", "likesCount": 13 },
+    { "imgSrc": "rainnyCar.jpg", "likesCount": 13 }
+  ],
   "products": [
     {
       "name": "Demo1",

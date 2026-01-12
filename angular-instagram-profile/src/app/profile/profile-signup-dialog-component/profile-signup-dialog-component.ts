@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, signal } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { InputGroupAddon } from 'primeng/inputgroupaddon';
@@ -23,6 +23,7 @@ import { MessageService } from 'primeng/api';
 
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile-signup-dialog-component',
@@ -63,8 +64,7 @@ import { User } from '../../models/user.model';
 export class ProfileSignupDialogComponent {
   userService = inject(UserService);
   messagesService = inject(MessageService);
-  user = signal<User | null>(null);
-
+  router = inject(Router);
   submitForm(): void {
     const invalidForms = Object.entries(this.userService.userForm.controls)
       .filter(([_, control]) => control.invalid)
@@ -85,6 +85,9 @@ export class ProfileSignupDialogComponent {
       detail: 'User added successfully',
       severity: 'success',
     });
+    this.router.navigate(['/profile', `${this.userService.user()?.username}`], {
+      replaceUrl: true,
+    }); //replaceUrl === the user can't navigate back to this url
     this.userService.visibleSignupDialog = false;
   }
 }

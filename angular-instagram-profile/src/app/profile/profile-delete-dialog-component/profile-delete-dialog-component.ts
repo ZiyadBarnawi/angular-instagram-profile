@@ -13,4 +13,9 @@ import { UserService } from './../../components/index';
 })
 export class ProfileDeleteDialogComponent {
   userService = inject(UserService);
+
+  deleteUser() {
+    this.userService.deleteUser(this.userService.user()!.username);
+    this.userService.user.set(null);
+  }
 }

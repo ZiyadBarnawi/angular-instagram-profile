@@ -81,11 +81,7 @@ p-message {
   font-size: 2.4rem;
   z-index: 999999;
 }
-/* :host,
-:host ::ng-deep .p-component,
-:host ::ng-deep .p-component::placeholder {
-  font-size: 1.6rem;
-} FIX: to be removed */
+
 :host ::ng-deep .p-message,
 :host ::ng-deep .p-message-content,
 :host ::ng-deep .p-message-text {
@@ -93,38 +89,6 @@ p-message {
   z-index: 9999;
   font-size: 2.4rem;
 }
-
-/* :host ::ng-deep input::placeholder {
-  font-size: 1.4rem;
-}
-:host ::ng-deep .p-checkbox {
-  transform: scale(1.5);
-} FIX: to be removed */
-
-/* :host ::ng-deep p-input-group .p-inputwrapper,
-:host ::ng-deep p-input-group .p-inputmask,
-:host ::ng-deep p-input-group .p-datepicker-input,
-:host ::ng-deep p-input-group .p-autocomplete-input,
-:host ::ng-deep p-input-group .p-datepicker-input {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  width: 100%;
-}
-:host ::ng-deep .inputmask-credentials input,
-:host ::ng-deep .inputmask-credentials input:focus {
-  border: none;
-  height: 1.4rem;
-}
-
-:host ::ng-deep .p-datatable-header,
-:host ::ng-deep .p-datatable-thead,
-:host ::ng-deep .p-datatable-thead th {
-  background-color: transparent;
-  border: none;
-}
-:host ::ng-deep .p-button-lg {
-  width: 100%;
-} FIX: to be removed */
 
 :host ::ng-deep .p-button-dialog button {
   font-size: 1.6rem;
@@ -141,9 +105,16 @@ p-message {
 }
 :host ::ng-deep .pi-user-edit:hover,
 :host ::ng-deep .pi-trash:hover {
-  /* font-size: 2.4rem; */
   transform: scale(1.1);
 }
 :host ::ng-deep .payment-radio {
+  font-size: 1.4rem;
+}
+
+::ng-deep .div-action-button span {
+  font-size: 1.6rem;
+}
+
+::ng-deep .span-stats {
   font-size: 1.4rem;
 }

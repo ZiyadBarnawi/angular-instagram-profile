@@ -1,27 +1,29 @@
 <nav>
   <h1 class="logo">ElmerGram</h1>
-  <p-menu [model]="menuItems" class="flex justify-center" styleClass="w-full md:w-60"> </p-menu>
-  <p-drawer appendTo="body" [(visible)]="visible">
+  <p-menu [model]="menuItems" class="flex justify-center" class="auto-complete w-full"> </p-menu>
+  <p-drawer appendTo="body" class="drawer" [(visible)]="visibleDrawer">
+    <h2 class="my-4">Search</h2>
     <p-auto-complete
-      class=""
+      class="auto-complete"
       [suggestions]="suggestedUsers"
       optionLabel="username"
-      [formControl]="formControl"
-      (completeMethod)="onSearch($event)"
+      (completeMethod)="search($event)"
+      (onSelect)="updateCurrentUser($event)"
     >
       <!-- TIP: ng-template is a tag not rendered by default, but when you instructs it to do so. -->
       <!-- TIP: PrimeNG has a set of templates ids (e.g.: #item) you cas specify to -->
       <ng-template class="m-4" #item let-suggestedUser>
-        <a routerLink="{{ suggestedUser.username }}">
-          <div (click)="onUserClick(suggestedUser)" class="div-suggested-user d-flex gap-1">
-            <div class="w-25 h-100 d-flex justify-content-center align-items-center">
-              <img
-                class="w-100 h-100 rounded-circle object-fit-cover"
-                src="{{ suggestedUser.pfpUrl }}"
-                alt="pic"
-              />
-            </div>
-            <span class="span-search-username w-75">{{ suggestedUser.username }}</span>
+        <a class="a-suggested-user" routerLink="/profile/{{ suggestedUser.username }}">
+          <div
+            (click)="updateCurrentUser(suggestedUser)"
+            class="div-suggested-user d-flex align-items-center gap-1"
+          >
+            <p-avatar
+              [image]="suggestedUser.pfp || userService.Images[5]"
+              shape="circle"
+              class="avatar-pfp"
+            />
+            <span class="span-search-username">{{ suggestedUser.username }}</span>
           </div>
         </a>
       </ng-template>

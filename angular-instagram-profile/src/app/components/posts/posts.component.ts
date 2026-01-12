@@ -1,10 +1,9 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 
 import { TabsModule } from 'primeng/tabs';
 
 import { Post } from '../post/post.component';
-// import { User } from '../../models/user.model';
-import { User } from '../../components/index';
+import { User, UserService } from '../../components/index';
 @Component({
   standalone: true,
   selector: 'app-posts',
@@ -14,7 +13,8 @@ import { User } from '../../components/index';
 })
 export class Posts {
   randomNum = signal<number>(Math.floor(Math.random() * 7));
-  user = input<User>();
+  userService = inject(UserService);
+  user = this.userService.user;
   updateRandomValue(): void {
     this.randomNum.set(Math.floor(Math.random() * 7) + 1);
   }

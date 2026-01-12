@@ -1,20 +1,17 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, output, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, input, output, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { Drawer, DrawerModule } from 'primeng/drawer';
-import { AutoCompleteModule, AutoComplete } from 'primeng/autocomplete';
+import { AutoCompleteModule, AutoComplete, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { RippleModule } from 'primeng/ripple';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 import { catchError, Observable } from 'rxjs';
-import { UserService } from '../../services/user.service';
-import { environment } from '../../../environments/environment';
-import { Images } from '../../models/images.enum';
-import { User } from '../../models/user.model';
+import { User, UserService, environment } from './../../components/index';
+import { AvatarModule } from 'primeng/avatar';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -28,6 +25,7 @@ import { User } from '../../models/user.model';
     InputGroupModule,
     RippleModule,
     RouterLink,
+    AvatarModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './navbar.component.html',
@@ -35,11 +33,15 @@ import { User } from '../../models/user.model';
 })
 export class Navbar {
   user = output<User>();
-  http = inject(UserService);
-  visible = false;
-  formControl = new FormControl();
+  userService = inject(UserService);
+  username = input();
+  router = inject(Router);
+  visibleDrawer = false;
+
   users: User[] = [];
-  suggestedUsers: User[] = [{ username: '', pfpUrl: Images[1], password: '123456' }];
+  suggestedUsers: User[] = [
+    { username: '', pfpUrl: this.userService.Images[1], password: '123456' },
+  ];
   routerUsername = signal<string>('');
   menuItems: MenuItem[] = [
     {
@@ -52,7 +54,7 @@ export class Navbar {
       label: 'Search',
       icon: 'pi pi-search',
       command: (): void => {
-        this.visible = !this.visible;
+        this.visibleDrawer = !this.visibleDrawer;
       },
     },
     {
@@ -86,9 +88,9 @@ export class Navbar {
       routerLink: `profile/${this.routerUsername()}`,
     },
   ];
-  async onSearch(searchWord: any): Promise<void> {
+  async search(searchWord: any): Promise<void> {
     if (environment.production) {
-      let users = (await this.http.getUsers()) as Observable<Object>;
+      let users = (await this.userService.getUsers()) as Observable<Object>;
       users
         .pipe(
           catchError((err) => {
@@ -103,15 +105,15 @@ export class Navbar {
           ) as User[];
         });
     } else {
-      this.users = (await this.http.getUsers()) as User[];
+      this.users = (await this.userService.getUsers()) as User[];
       this.suggestedUsers = this.users?.filter((user) =>
         user.username.toLowerCase().includes(searchWord.query?.toLowerCase())
       ) as User[];
     }
   }
 
-  async onUserClick(user: User): Promise<void> {
-    let data = await this.http.getUsers(user.username);
+  async updateCurrentUser(event: AutoCompleteSelectEvent): Promise<void> {
+    let data = await this.userService.getUsers(event.value.username);
 
     if (environment.production) {
       data = data as Observable<Object>;
@@ -123,13 +125,15 @@ export class Navbar {
         )
         .subscribe((data: any) => {
           this.user.emit(data.data);
+          console.log(data);
+
           this.routerUsername.set(data.data.username);
         });
     } else {
       data = data as User;
-
+      this.userService.user.set(data);
+      this.router.navigate(['profile', `${data.username}`]);
       this.user.emit(data as User);
-      this.routerUsername.set(data.username);
     }
   }
 }

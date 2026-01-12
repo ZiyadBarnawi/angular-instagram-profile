@@ -46,7 +46,8 @@
   width: 15rem;
   height: 15rem;
 }
-:host ::ng-deep .selectbutton-gender span {
+:host ::ng-deep .selectbutton-gender span,
+:host ::ng-deep .selectbutton-account-type span {
   font-size: 1.6rem;
 }
 :host ::ng-deep .input-group-date-of-birth {

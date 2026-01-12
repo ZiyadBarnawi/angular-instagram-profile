@@ -33,7 +33,7 @@ export interface User {
     day: string;
     available: boolean | null;
     flexible: boolean | null;
-    openHours: string | null;
-    closeHours: string | null;
+    openHours: string;
+    closeHours: string;
   }[];
 }
