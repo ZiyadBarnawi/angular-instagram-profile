@@ -11,7 +11,7 @@ import { User, UserService } from '../../components/index';
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.css',
 })
-export class Posts {
+export class PostsComponent {
   randomNum = signal<number>(Math.floor(Math.random() * 7));
   userService = inject(UserService);
   user = this.userService.user;

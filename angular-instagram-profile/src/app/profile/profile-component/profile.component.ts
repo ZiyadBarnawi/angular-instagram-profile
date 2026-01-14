@@ -7,6 +7,7 @@ import {
   input,
   effect,
 } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterOutlet, RouterLinkWithHref } from '@angular/router';
 import { Observable, catchError, firstValueFrom, take } from 'rxjs';
@@ -15,24 +16,17 @@ import { Button } from 'primeng/button';
 import { Avatar } from 'primeng/avatar';
 import { MessageService } from 'primeng/api';
 
-import { User } from '../../models/user.model';
-import { environment } from '../../../environments/environment';
-import { ProfileSignupDialogComponent } from '../profile-signup-dialog-component/profile-signup-dialog-component';
-import { ProfileEditDialogComponent } from '../profile-edit-dialog-component/profile-edit-dialog-component';
-import { ProfileDeleteDialogComponent } from '../profile-delete-dialog-component/profile-delete-dialog-component';
-import { UserService } from '../../services/user.service';
-import { HttpClient } from '@angular/common/http';
-import { Posts } from '../../components/posts/posts.component';
+import { PostsComponent } from '../../components/posts/posts.component';
+import { UserService, environment, type User } from './../../components/index';
 @Component({
   selector: 'app-profile',
-  imports: [Button, Avatar, ReactiveFormsModule, RouterOutlet, RouterLinkWithHref, Posts],
-
+  imports: [Button, Avatar, ReactiveFormsModule, RouterOutlet, RouterLinkWithHref, PostsComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   standalone: true,
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
-export class Profile implements OnInit {
+export class ProfileComponent implements OnInit {
   userService = inject(UserService);
   http = inject(HttpClient);
   userForm = this.userService.userForm;
@@ -40,8 +34,9 @@ export class Profile implements OnInit {
   messagesService = inject(MessageService);
   username = input<string>(); // TIP: this get its value form the url
   user = this.userService.user;
+  Images = this.userService.Images;
 
-  stories = signal<[{ src: string }]>([{ src: 'sunnyDay.jpg' }]);
+  stories = signal<[{ src: string }]>([{ src: this.Images[6] }]);
   isFollowed = signal<boolean>(false);
   messageVisible = signal<boolean>(false);
   message = '';
@@ -97,7 +92,7 @@ export class Profile implements OnInit {
           });
       } else {
         data = data as User;
-        this.user.set(data);
+        this.userService.user.set(data);
       }
     });
     this.userService.GetJsonUser().subscribe((data) => {

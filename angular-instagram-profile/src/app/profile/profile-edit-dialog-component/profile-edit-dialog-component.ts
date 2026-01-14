@@ -49,18 +49,16 @@ export class ProfileEditDialogComponent implements OnInit {
   userService = inject(UserService);
   messageService = inject(MessageService);
   router = inject(Router);
+  Images = this.userService.Images;
   async submitForm() {
     if (environment.production) {
     } else {
-      console.log(this.userService.userForm.value);
-      console.log(this.userService.userForm.value);
-
       let user = (await this.userService.editUser()) as User;
       // this.userService.user.set();
     }
     this.router.navigate(['/profile', `${this.userService.user()?.username}`], {
       replaceUrl: true,
-    }); //replaceUrl === the user can't navigate back to this url
+    }); //replaceUrl ==> the user can't navigate back to this url
 
     this.messageService.add({ summary: 'Updated successfully' });
     this.router.navigate(['/profile', `${this.userService.user()?.username}`], {

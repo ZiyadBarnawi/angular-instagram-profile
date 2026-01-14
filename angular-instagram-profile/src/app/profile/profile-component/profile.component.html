@@ -18,13 +18,13 @@
         <!--! Profile Pic -->
         <div class="div-profile-picture-container">
           <p-avatar
-            [image]="user()!.pfpUrl || 'sunnyDay.jpg'"
+            [image]="user()!.pfpUrl || Images[6]"
             class="mr-2"
             size="xlarge"
             shape="circle"
           />
         </div>
-        <!--! Profile Details -->
+        <!--! ProfileComponent Details -->
         <div class="div-profile-details">
           <div class="d-flex w-100">
             <div class="div-profile-states d-flex flex-column gap-3 w-100">
@@ -36,7 +36,7 @@
                 <!-- <span (click)="userService.visibleEditDialog = true" class="pi pi-user-edit"></span> -->
                 <a
                   (click)="userService.visibleEditDialog = true"
-                  routerLink="/profile/{{ user()?.username }}/edit"
+                  routerLink="/profile/{{ username() }}/edit"
                 >
                   <i class="pi pi-user-edit"></i>
                 </a>

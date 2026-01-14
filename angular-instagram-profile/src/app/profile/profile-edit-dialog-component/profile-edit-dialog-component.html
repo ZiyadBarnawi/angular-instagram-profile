@@ -26,7 +26,7 @@
       </p-fileupload>
       <p-avatar
         [shape]="'circle'"
-        [image]="userService.user()?.pfpUrl || 'sunnyDay.jpg'"
+        [image]="userService.user()?.pfpUrl || Images[6]"
         class="img-pfp my-4"
       />
     </div>
@@ -63,19 +63,16 @@
           </svg>
         </p-button>
       </p-inputgroup-addon>
-      @if (userService.userForm.value.email) {
-
+      @if (userService.user()?.email) {
       <input
         size="large"
         type="text"
         [formControl]="userService.userForm.controls.email"
         pInputText
         class="inputmask-credentials"
-        [placeholder]="userService.user()?.email || ''"
+        [placeholder]="userService.user()?.email"
       />
-
       }@else{
-
       <p-inputmask
         [mask]="'(+999)99-999-9999'"
         size="large"

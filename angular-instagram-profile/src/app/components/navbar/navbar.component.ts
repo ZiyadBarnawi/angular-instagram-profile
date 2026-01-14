@@ -9,7 +9,7 @@ import { RippleModule } from 'primeng/ripple';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
-import { catchError, Observable } from 'rxjs';
+import { catchError, firstValueFrom, Observable } from 'rxjs';
 import { User, UserService, environment } from './../../components/index';
 import { AvatarModule } from 'primeng/avatar';
 @Component({
@@ -84,8 +84,12 @@ export class Navbar {
     {
       label: 'Profile',
       icon: 'pi pi-user',
-      command: (): void => {},
-      routerLink: `profile/${this.routerUsername()}`,
+      command: async (): Promise<void> => {
+        const data: User = (await firstValueFrom(this.userService.GetJsonUser())) as User;
+
+        this.userService.user.set(data);
+      },
+      routerLink: 'profile/Ziyad',
     },
   ];
   async search(searchWord: any): Promise<void> {
@@ -125,7 +129,6 @@ export class Navbar {
         )
         .subscribe((data: any) => {
           this.user.emit(data.data);
-          console.log(data);
 
           this.routerUsername.set(data.data.username);
         });
