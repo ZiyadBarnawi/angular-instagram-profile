@@ -79,6 +79,13 @@ export class ProfileSignupDialogComponent {
     }
 
     this.userService.addUser();
+    this.userService.user.update((user) => {
+      Object.keys(user!).forEach((key) => {
+        (user![key as keyof User] as any) =
+          this.userService.userForm.value[key as keyof typeof this.userService.userForm.value];
+      });
+      return user;
+    });
     this.userService.userForm.reset();
     this.messagesService.add({
       summary: 'Success!',

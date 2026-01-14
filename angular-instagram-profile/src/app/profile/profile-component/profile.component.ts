@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterOutlet, RouterLinkWithHref } from '@angular/router';
+import { Router, RouterOutlet, RouterLinkWithHref, ResolveFn } from '@angular/router';
 import { Observable, catchError, firstValueFrom, take } from 'rxjs';
 
 import { Button } from 'primeng/button';
@@ -35,15 +35,13 @@ export class ProfileComponent implements OnInit {
   username = input<string>(); // TIP: this get its value form the url
   user = this.userService.user;
   Images = this.userService.Images;
-
+  text = input(); // TIP: This text is read as a static route data
   stories = signal<[{ src: string }]>([{ src: this.Images[6] }]);
   isFollowed = signal<boolean>(false);
-  messageVisible = signal<boolean>(false);
   message = '';
   messageSeverity = 'success';
 
   toggleFollow(): void {
-    this.messageVisible.set(true);
     this.isFollowed.set(!this.isFollowed());
     this.messagesService.add({
       summary: this.isFollowed() ? 'Followed!' : 'Un-Followed',
@@ -66,37 +64,18 @@ export class ProfileComponent implements OnInit {
             this.user.set(data.data);
           });
       } else {
-        data = data as User;
-        this.user.set(data);
+        this.userService.user.set(data as User);
       }
     });
   }
   async ngOnInit(): Promise<void> {
-    let userObservable = this.http.get('data/user.json');
-    let user = (await firstValueFrom(userObservable)) as User;
-
-    this.user.set(user);
-    this.router.events.subscribe(async () => {
-      let data = await this.userService.getUsers(this.username());
-
-      if (environment.production) {
-        data = data as Observable<Object>;
-        data
-          .pipe(
-            catchError((err) => {
-              throw err;
-            })
-          )
-          .subscribe((data: any) => {
-            this.user.set(data.data);
-          });
-      } else {
-        data = data as User;
-        this.userService.user.set(data);
-      }
-    });
-    this.userService.GetJsonUser().subscribe((data) => {
-      this.user.set(data as User);
-    });
+    console.log(this.text());
   }
 }
+
+export const resolveRouteData: ResolveFn<string> = (snapshot, routeState) =>
+  "I'm a dynamic route text!✨";
+export const resolveTitle: ResolveFn<string> = (
+  routeSnapshot, //  snapshot form ActivatedRoute
+  routeState //  Route Data
+) => `ElmerGram | ${routeSnapshot?.paramMap.get('username')}`;

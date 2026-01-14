@@ -117,6 +117,8 @@ export class Navbar {
   }
 
   async updateCurrentUser(event: AutoCompleteSelectEvent): Promise<void> {
+    if (!event?.value?.username) return;
+
     let data = await this.userService.getUsers(event.value.username);
 
     if (environment.production) {
@@ -136,7 +138,7 @@ export class Navbar {
       data = data as User;
       this.userService.user.set(data);
       this.router.navigate(['profile', `${data.username}`]);
-      this.user.emit(data as User);
+      this.user.emit(data);
     }
   }
 }

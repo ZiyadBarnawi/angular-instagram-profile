@@ -259,10 +259,22 @@ export class UserService {
   async addUser(): Promise<void> {
     let users: User[] = JSON.parse(localStorage.getItem('users') as string) as User[];
     if (users) {
-      delete this.userForm.value.otp;
-      delete this.userForm.value.confirmPassword;
-
-      users.push(this.userForm.value as User);
+      // delete this.userForm.value.otp;
+      // delete this.userForm.value.confirmPassword;
+      let user: any = { ...this.userForm.value };
+      user.posts = [
+        { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
+        { imgSrc: 'desert.jpg', likesCount: 13 },
+        { imgSrc: 'sunFlower.jpg', likesCount: 13 },
+        { imgSrc: 'carbet.jpg', likesCount: 13 },
+        { imgSrc: 'rainnyCar.jpg', likesCount: 13 },
+      ];
+      delete user.otp;
+      delete user.confirmPassword;
+      delete user.newDiscount;
+      delete user.newCategory;
+      // users.push(this.userForm.value as User);
+      users.push(user);
       localStorage.setItem(`users`, JSON.stringify(users));
     }
     //first user

@@ -1,28 +1,22 @@
 import { Routes } from '@angular/router';
-import { ProfileComponent } from './profile/profile-component/profile.component';
+import {
+  ProfileComponent,
+  resolveRouteData,
+  resolveTitle,
+} from './profile/profile-component/profile.component';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     loadComponent: () => import('./home/home.component').then((m) => m.Home),
+    title: 'ElmerGram ',
   },
-  // {
-  //   path: 'profile',
-  //   pathMatch: 'prefix',
-  //   loadComponent: () =>
-  //     import('./profile/profile-component/profile.component').then((m) => m.ProfileComponent),
-  //   children: [
-  //     {
-  //       path: 'signup',
-  //       pathMatch: 'prefix',
-  //       loadComponent: () =>
-  //         import(
-  //           '././profile/profile-signup-dialog-component/profile-signup-dialog-component'
-  //         ).then((m) => m.ProfileSignupDialogComponent),
-  //     },
-  //   ],
-  // },
+  {
+    path: 'profile', // http://localhost:4200/profile
+    pathMatch: 'full',
+    redirectTo: 'profile/Ziyad',
+  },
   {
     path: 'profile/:username',
     pathMatch: 'prefix',
@@ -30,7 +24,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./profile/profile-component/profile.component').then((m) => m.ProfileComponent),
     // TIP: Lazy loaded: loaded when needed
+    title: resolveTitle,
+    data: { text: "I'm a static route text!✨" },
+    runGuardsAndResolvers: 'always',
 
+    resolve: {
+      text: resolveRouteData,
+    }, //TIP: it appears that on conflict, resolve value will take precedence
     loadChildren: (): Routes => [
       {
         path: 'edit',
@@ -60,6 +60,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
+    title: 'ElmerGram',
     loadComponent: () =>
       import('./shared/not-found-component/not-found-component').then((m) => m.NotFoundComponent),
   },
