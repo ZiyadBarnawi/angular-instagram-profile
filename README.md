@@ -10,10 +10,11 @@ Weekly report:
 
   # 12/1/2026
   ## Routing
-  - Using RouterOutlets to render components
-  - effect function to update according to the current URL
+  - RouterOutlets to render components
+  - Effect function to update according to the current URL
   - nested routes
   - route params and static/dynamic data
+  - not-found route component
     ## Refactor
     - barrel exports
     - code clean up
