@@ -15,9 +15,10 @@ Weekly report:
   - nested routes
   - route params and static/dynamic data
   - not-found route component
-    ## Refactor
-    - barrel exports
-    - code clean up
+  - Route Guards
+  ## Refactor
+  - barrel exports
+  - code clean up
 
 <img width="2879" height="1577" alt="image" src="https://github.com/user-attachments/assets/6bb7f060-fc53-4567-8cff-cb80b5db1f21" />
 
