@@ -335,6 +335,16 @@ export class UserService {
       let oldUserIndex = users.findIndex((user) => user.username === this.user()!.username);
       if (oldUserIndex < 0) return null;
       users[oldUserIndex] = this.userForm.value as User;
+      users[oldUserIndex].posts = [
+        { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
+        { imgSrc: 'desert.jpg', likesCount: 13 },
+        { imgSrc: 'sunFlower.jpg', likesCount: 13 },
+        { imgSrc: 'carbet.jpg', likesCount: 13 },
+        { imgSrc: 'rainnyCar.jpg', likesCount: 13 },
+      ];
+
+      let user: any = { ...this.userForm.value };
+
       localStorage.setItem('users', JSON.stringify(users));
       this.user.set(users[oldUserIndex]);
 

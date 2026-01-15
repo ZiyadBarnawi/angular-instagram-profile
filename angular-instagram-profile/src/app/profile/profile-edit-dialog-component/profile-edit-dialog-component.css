@@ -46,7 +46,9 @@
   width: 15rem;
   height: 15rem;
 }
-
+.fileupload-edit-pfp {
+  transform: translate(50px, 5px);
+}
 :host ::ng-deep .fileupload-edit-pfp span {
   padding: 0;
 }

@@ -79,13 +79,17 @@ export class ProfileSignupDialogComponent {
     }
 
     this.userService.addUser();
-    this.userService.user.update((user) => {
-      Object.keys(user!).forEach((key) => {
-        (user![key as keyof User] as any) =
-          this.userService.userForm.value[key as keyof typeof this.userService.userForm.value];
+    if (this.userService.user()) {
+      this.userService.user.update((user) => {
+        Object.keys(user!).forEach((key) => {
+          (user![key as keyof User] as any) =
+            this.userService.userForm.value[key as keyof typeof this.userService.userForm.value];
+        });
+        return user;
       });
-      return user;
-    });
+    } else {
+      this.userService.user.set(this.userService.userForm.value as User);
+    }
     this.userService.userForm.reset();
     this.messagesService.add({
       summary: 'Success!',

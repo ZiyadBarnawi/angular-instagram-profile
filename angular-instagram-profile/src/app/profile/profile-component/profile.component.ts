@@ -69,6 +69,8 @@ export class ProfileComponent implements OnInit {
     });
   }
   async ngOnInit(): Promise<void> {
+    const user = await this.userService.getUsers(this.username());
+
     console.log(this.text());
   }
 }
