@@ -1,9 +1,13 @@
-import { Routes } from '@angular/router';
-import {
-  ProfileComponent,
-  resolveRouteData,
-  resolveTitle,
-} from './profile/profile-component/profile.component';
+import { CanMatchFn, RedirectCommand, Router, Routes } from '@angular/router';
+import { inject } from '@angular/core';
+
+import { profileRoutes } from './router/routes';
+
+const redirectToUnAuthorize: CanMatchFn = (route, segment) => {
+  console.log(route, segment);
+  const router = inject(Router);
+  return new RedirectCommand(router.parseUrl('/unauthorized'));
+};
 
 export const routes: Routes = [
   {
@@ -12,54 +16,16 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.component').then((m) => m.Home),
     title: 'ElmerGram ',
   },
-  {
-    path: 'profile', // http://localhost:4200/profile
-    pathMatch: 'full',
-    redirectTo: 'profile/Ziyad',
-  },
-  {
-    path: 'profile/:username',
-    pathMatch: 'prefix',
-    // component:ProfileComponent , //TIP: eagerly loaded component: loaded immediately
-    loadComponent: () =>
-      import('./profile/profile-component/profile.component').then((m) => m.ProfileComponent),
-    // TIP: Lazy loaded: loaded when needed
-    title: resolveTitle,
-    data: { text: "I'm a static route text!✨" },
-    runGuardsAndResolvers: 'always',
-
-    resolve: {
-      text: resolveRouteData,
-    }, //TIP: it appears that on conflict, resolve value will take precedence
-    loadChildren: (): Routes => [
-      {
-        path: 'edit',
-        pathMatch: 'prefix',
-        loadComponent: () =>
-          import('././profile/profile-edit-dialog-component/profile-edit-dialog-component').then(
-            (m) => m.ProfileEditDialogComponent
-          ),
-      },
-      {
-        path: 'signup',
-        pathMatch: 'prefix',
-        loadComponent: () =>
-          import(
-            '././profile/profile-signup-dialog-component/profile-signup-dialog-component'
-          ).then((m) => m.ProfileSignupDialogComponent),
-      },
-      {
-        path: 'delete',
-        pathMatch: 'prefix',
-        loadComponent: () =>
-          import(
-            '././profile/profile-delete-dialog-component/profile-delete-dialog-component'
-          ).then((m) => m.ProfileDeleteDialogComponent),
-      },
-    ],
-  },
+  ...(profileRoutes as Routes),
+  // {
+  //   path: 'posts',
+  //   loadComponent: () =>
+  //     import('./shared/not-found-component/not-found-component').then((m) => m.NotFoundComponent),
+  //   canActivate: [testCanMatch],
+  // },
   {
     path: '**',
+    canActivate: [redirectToUnAuthorize],
     title: 'ElmerGram',
     loadComponent: () =>
       import('./shared/not-found-component/not-found-component').then((m) => m.NotFoundComponent),

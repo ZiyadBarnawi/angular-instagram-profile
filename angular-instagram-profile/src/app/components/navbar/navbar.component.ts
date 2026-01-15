@@ -67,19 +67,19 @@ export class Navbar {
       label: 'Reels',
       icon: 'pi pi-video',
       command: (): void => {},
-      routerLink: 'Reels',
+      routerLink: 'reels',
     },
     {
       label: 'Messages',
       icon: 'pi pi-file',
       command: (): void => {},
-      routerLink: 'Messages',
+      routerLink: 'messages',
     },
     {
       label: 'Post',
       icon: 'pi pi-send',
       command: (): void => {},
-      routerLink: 'Posts',
+      routerLink: 'posts',
     },
     {
       label: 'Profile',
