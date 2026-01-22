@@ -1,4 +1,8 @@
 export interface Post {
-  imgSrc: string;
-  likesCount: number;
+  id?: string;
+  username?: string;
+  media?: string;
+  description?: string;
+  likes?: number;
+  createdAt?: Date;
 }

@@ -261,11 +261,11 @@ export class UserService {
       // delete this.userForm.value.confirmPassword;
       let user: any = { ...this.userForm.value };
       user.posts = [
-        { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-        { imgSrc: 'desert.jpg', likesCount: 13 },
-        { imgSrc: 'sunFlower.jpg', likesCount: 13 },
-        { imgSrc: 'carbet.jpg', likesCount: 13 },
-        { imgSrc: 'rainnyCar.jpg', likesCount: 13 },
+        { media: 'sunnyDay.jpg', likes: 13 },
+        { media: 'desert.jpg', likes: 13 },
+        { media: 'sunFlower.jpg', likes: 13 },
+        { media: 'carbet.jpg', likes: 13 },
+        { media: 'rainnyCar.jpg', likes: 13 },
       ];
       delete user.otp;
       delete user.confirmPassword;
@@ -334,11 +334,11 @@ export class UserService {
       if (oldUserIndex < 0) return null;
       users[oldUserIndex] = this.userForm.value as User;
       users[oldUserIndex].posts = [
-        { imgSrc: 'sunnyDay.jpg', likesCount: 13 },
-        { imgSrc: 'desert.jpg', likesCount: 13 },
-        { imgSrc: 'sunFlower.jpg', likesCount: 13 },
-        { imgSrc: 'carbet.jpg', likesCount: 13 },
-        { imgSrc: 'rainnyCar.jpg', likesCount: 13 },
+        { media: 'sunnyDay.jpg', likes: 13 },
+        { media: 'desert.jpg', likes: 13 },
+        { media: 'sunFlower.jpg', likes: 13 },
+        { media: 'carbet.jpg', likes: 13 },
+        { media: 'rainnyCar.jpg', likes: 13 },
       ];
 
       let user: any = { ...this.userForm.value };

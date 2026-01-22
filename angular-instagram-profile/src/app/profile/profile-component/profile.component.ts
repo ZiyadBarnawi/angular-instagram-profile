@@ -7,6 +7,7 @@ import {
   input,
   effect,
   DestroyRef,
+  Injector,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -35,6 +36,7 @@ import { MessageService } from 'primeng/api';
 
 import { PostsComponent } from '../../components/posts/posts.component';
 import { UserService, environment, type User } from './../../components/index';
+import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-profile',
   imports: [Button, Avatar, ReactiveFormsModule, RouterOutlet, RouterLinkWithHref, PostsComponent],
@@ -49,16 +51,30 @@ export class ProfileComponent implements OnInit {
   messagesService = inject(MessageService);
   private destroyRed = inject(DestroyRef);
   private httpService = inject(HttpClient);
+  private injector = inject(Injector);
 
   userForm = this.userService.userForm;
-  username = input<string>(); // TIP: this get its value form the url
   user = this.userService.user;
   Images = this.userService.Images;
+
+  username = input<string>(); // TIP: this get its value form the url
   text = input(); // TIP: This text is read as a static route data
-  stories = signal<[{ src: string }]>([{ src: this.Images[6] }]);
+
+  stories = signal<[{ src: string }]>([{ src: this.Images[3] }]);
   isFollowed = signal<boolean>(false);
-  message = '';
-  messageSeverity = 'success';
+
+  interval$ = interval(1000);
+  signalObserver = toSignal(this.interval$, {
+    initialValue: 0,
+    equal: (
+      a, //curr val
+      b, // new val
+    ) => {
+      return a === b;
+    },
+    injector: inject(Injector),
+    manualCleanup: true,
+  });
 
   toggleFollow(): void {
     this.isFollowed.set(!this.isFollowed());
@@ -91,41 +107,8 @@ export class ProfileComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    const user = await this.userService.getUsers(this.username());
-    const button = document.querySelector('p-button');
-    const myInterval$ = interval(1000);
-    let buttonObs$ = fromEvent(button!, 'click');
-
-    const obs1 = new Observable((observer) => {
-      setTimeout(async () => {
-        observer.next(await firstValueFrom(this.httpService.get('https://dummyjson.com/recipes')));
-        observer.complete();
-      }, 1000);
-    });
-    const obs2 = new Observable((observer) => {
-      setTimeout(async () => {
-        observer.next(await firstValueFrom(this.httpService.get('https://dummyjson.com/recipes')));
-        observer.complete();
-      }, 6000);
-    });
-    const obs3 = timer(3000);
-
-    buttonObs$.subscribe({
-      next(value) {
-        console.log('In the outer func');
-
-        forkJoin([obs1, obs2, obs3]).subscribe({
-          next: (val) => {
-            console.log('in the fork join');
-
-            console.log(val);
-          },
-        });
-      },
-    });
-
     this.destroyRed.onDestroy(() => {
-      console.log('Unsubscribe');
+      console.log('Destroyed');
     });
     console.log(this.text());
   }

@@ -48,27 +48,24 @@
                 </p-button>
               </p-inputgroup-addon>
               @if (userService.useEmail) {
-
-              <input
-                size="large"
-                type="text"
-                [formControl]="userService.userForm.controls.email"
-                pInputText
-                class="inputmask-credentials"
-                placeholder="Email Address"
-              />
-
-              }@else{
-
-              <p-inputmask
-                [mask]="'(+999)99-999-9999'"
-                size="large"
-                type="text"
-                [formControl]="userService.userForm.controls.phoneNumber"
-                pInputText
-                class="inputmask-credentials"
-                placeholder="Phone Number"
-              />
+                <input
+                  size="large"
+                  type="text"
+                  [formControl]="userService.userForm.controls.email"
+                  pInputText
+                  class="inputmask-credentials"
+                  placeholder="Email Address"
+                />
+              } @else {
+                <p-inputmask
+                  [mask]="'(+999)99-999-9999'"
+                  size="large"
+                  type="text"
+                  [formControl]="userService.userForm.controls.phoneNumber"
+                  pInputText
+                  class="inputmask-credentials"
+                  placeholder="Phone Number"
+                />
               }
               <p-inputgroup-addon>
                 <p-button
@@ -130,16 +127,14 @@
                 (onUpload)="userService.uploadFile($event, userService.userForm.controls.pfpUrl)"
               >
                 <ng-template #content>
-                  @if(userService.userForm.controls.pfpUrl.value){
-
-                  <ul>
-                    @for (file of userService.userForm.controls.pfpUrl.value ; track $index) {
-
-                    <li>
-                      <img class="img-pfp my-4" src="{{ file }}" alt="ppf" />
-                    </li>
-                    }
-                  </ul>
+                  @if (userService.userForm.controls.pfpUrl.value) {
+                    <ul>
+                      @for (file of userService.userForm.controls.pfpUrl.value; track $index) {
+                        <li>
+                          <img class="img-pfp my-4" src="{{ file }}" alt="ppf" />
+                        </li>
+                      }
+                    </ul>
                   }
                 </ng-template>
               </p-fileupload>
@@ -170,280 +165,279 @@
           </div>
 
           <!--! Business Account  -->
-          @if(userService.userForm.controls.accountType.value==='business'){
-          <div class="d-flex gap-4">
-            <div>
-              <p-input-group class="w-100 my-2 d-flex">
-                <p-inputgroup-addon>
-                  <i class="pi pi-search" (click)="userService.updateSuggestedCities($event)"></i>
-                </p-inputgroup-addon>
-                <p-autocomplete
-                  [formControl]="userService.userForm.controls.city"
-                  [suggestions]="userService.suggestedCities"
-                  appendTo="body"
-                  placeholder="Select your city"
-                  (completeMethod)="userService.updateSuggestedCities($event)"
-                />
-              </p-input-group>
-              <p-input-group class="my-2">
-                <p-inputgroup-addon
-                  ><i
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#ffffff"
-                      viewBox="0 0 256 256"
-                      data--h-bstatus="0OBSERVED"
-                    >
-                      <path
-                        d="M24,104H48v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16H208V104h24a8,8,0,0,0,4.19-14.81l-104-64a8,8,0,0,0-8.38,0l-104,64A8,8,0,0,0,24,104Zm40,0H96v64H64Zm80,0v64H112V104Zm48,64H160V104h32ZM128,41.39,203.74,88H52.26ZM248,208a8,8,0,0,1-8,8H16a8,8,0,0,1,0-16H240A8,8,0,0,1,248,208Z"
-                        data--h-bstatus="0OBSERVED"
-                      ></path></svg></i
-                ></p-inputgroup-addon>
-                <input
-                  [formControl]="userService.userForm.controls.iban"
-                  pInputText
-                  placeholder="IBAN"
-                />
-              </p-input-group>
-              <p-input-group class="my-2">
-                <p-inputgroup-addon><i class="pi pi-file"></i></p-inputgroup-addon>
-                <input
-                  [formControl]="userService.userForm.controls.commercialRegistryNumber"
-                  type=""
-                  placeholder="Commercial Registry"
-                  pInputText
-                />
-              </p-input-group>
-            </div>
-            <div class="d-flex flex-column justify-content-center align-items-center">
-              <p-fileupload
-                name="demo"
-                url="https://www.primefaces.org/cdn/api/upload.php"
-                [multiple]="true"
-                accept="application/pdf"
-                maxFileSize="1000000"
-                mode="advanced"
-                [showUploadButton]="false"
-                [auto]="true"
-                (onUpload)="
-                  userService.uploadFile($event, userService.userForm.controls.commercialPaper)
-                "
-              >
-                <ng-template #content>
-                  @if(userService.userForm.controls.commercialPaper.value){
-
-                  <a [href]="userService.userForm.controls.commercialPaper.value" target="_blank"
-                    >View</a
-                  >
-                  }
-                </ng-template></p-fileupload
-              >
-            </div>
-          </div>
-          <h2>Payment Methods</h2>
-          <div class="d-flex justify-content-between flex-wrap my-5">
-            <div class="d-flex w-100 justify-content-center align-items-center gap-5">
-              <div class="d-flex gap-2">
-                <label class="payment-radio" for="paymentMethods">Mada</label>
-
-                <p-checkbox
-                  [formControl]="userService.userForm.controls.paymentMethods"
-                  value="Mada"
-                />
-              </div>
-              <div class="d-flex gap-2">
-                <label class="payment-radio" for="paymentMethods">STC Pay</label>
-
-                <p-checkbox
-                  [formControl]="userService.userForm.controls.paymentMethods"
-                  value="stcPay"
-                />
-              </div>
-              <div class="d-flex gap-2">
-                <label class="payment-radio" for="paymentMethods">Apple Pay</label>
-
-                <p-checkbox
-                  [formControl]="userService.userForm.controls.paymentMethods"
-                  value="applePay"
-                />
-              </div>
-              <div class="d-flex gap-2">
-                <label class="payment-radio" for="paymentMethods">Google Pay</label>
-
-                <p-checkbox
-                  [formControl]="userService.userForm.controls.paymentMethods"
-                  value="googlePay"
-                />
-              </div>
-            </div>
-          </div>
-
-          <p-table [value]="userService.userForm.controls.products.controls">
-            <ng-template #caption>
-              <h3>Business Products</h3>
-            </ng-template>
-            <ng-template #header
-              ><tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Discount</th>
-              </tr>
-            </ng-template>
-            <ng-template #body let-group>
-              <tr>
-                <td>
-                  <input
-                    [formControl]="group.controls.name"
-                    type="text"
-                    pInputText
-                    placeholder="Product name"
+          @if (userService.userForm.controls.accountType.value === 'business') {
+            <div class="d-flex gap-4">
+              <div>
+                <p-input-group class="w-100 my-2 d-flex">
+                  <p-inputgroup-addon>
+                    <i class="pi pi-search" (click)="userService.updateSuggestedCities($event)"></i>
+                  </p-inputgroup-addon>
+                  <p-autocomplete
+                    [formControl]="userService.userForm.controls.city"
+                    [suggestions]="userService.suggestedCities"
+                    appendTo="body"
+                    placeholder="Select your city"
+                    (completeMethod)="userService.updateSuggestedCities($event)"
                   />
-                </td>
-                <td class="d-flex">
-                  <p-inputNumber currency="SAR" [formControl]="group.controls.price" />
-                </td>
-                <td>
-                  <p-select
-                    name="categories"
-                    appendTo="body"
-                    [formControl]="group.controls.categories"
-                    [options]="userService.categories"
-                  >
-                    <ng-template class="w-100 h-100 d-flex justify-content-center" #footer>
-                      <p-input-group>
-                        <p-inputgroup-addon
-                          ><p-button
-                            (click)="userService.addNewCategory()"
-                            icon="pi pi-plus"
-                          ></p-button
-                        ></p-inputgroup-addon>
-                        <input
-                          [formControl]="userService.userForm.controls.newCategory"
-                          type="text"
-                          pInputText
-                          placeholder="New Category"
-                        />
-                      </p-input-group>
-                    </ng-template>
-                  </p-select>
-                </td>
-                <td>
-                  <p-select
-                    name="discount"
-                    [formControl]="group.controls.discounts"
-                    appendTo="body"
-                    [options]="userService.discounts"
-                  >
-                    <ng-template class="w-100 h-100 d-flex justify-content-center" #footer>
-                      <p-input-group>
-                        <p-inputgroup-addon
-                          ><p-button
-                            (click)="userService.addNewDiscount()"
-                            icon="pi pi-plus"
-                          ></p-button
-                        ></p-inputgroup-addon>
-                        <input
-                          [formControl]="userService.userForm.controls.newDiscount"
-                          type="text"
-                          pInputText
-                          placeholder="New Discount"
-                        />
-                      </p-input-group>
-                    </ng-template>
-                  </p-select>
-                </td>
-              </tr>
-            </ng-template>
-            <ng-template #footer>
-              <div class="d-flex justify-content-start">
-                <p-button
-                  (onClick)="userService.addNewProduct()"
-                  label="Add"
-                  outlined="true"
-                  icon="pi pi-plus"
-                />
+                </p-input-group>
+                <p-input-group class="my-2">
+                  <p-inputgroup-addon
+                    ><i
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="#ffffff"
+                        viewBox="0 0 256 256"
+                        data--h-bstatus="0OBSERVED"
+                      >
+                        <path
+                          d="M24,104H48v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16H208V104h24a8,8,0,0,0,4.19-14.81l-104-64a8,8,0,0,0-8.38,0l-104,64A8,8,0,0,0,24,104Zm40,0H96v64H64Zm80,0v64H112V104Zm48,64H160V104h32ZM128,41.39,203.74,88H52.26ZM248,208a8,8,0,0,1-8,8H16a8,8,0,0,1,0-16H240A8,8,0,0,1,248,208Z"
+                          data--h-bstatus="0OBSERVED"
+                        ></path></svg></i
+                  ></p-inputgroup-addon>
+                  <input
+                    [formControl]="userService.userForm.controls.iban"
+                    pInputText
+                    placeholder="IBAN"
+                  />
+                </p-input-group>
+                <p-input-group class="my-2">
+                  <p-inputgroup-addon><i class="pi pi-file"></i></p-inputgroup-addon>
+                  <input
+                    [formControl]="userService.userForm.controls.commercialRegistryNumber"
+                    type=""
+                    placeholder="Commercial Registry"
+                    pInputText
+                  />
+                </p-input-group>
               </div>
-            </ng-template>
-          </p-table>
-          <div>
-            <div class="w-100 my-4">
-              <h2>Open hours</h2>
-
-              @for (group of userService.userForm.controls.workHours.controls; track $index) {
-
-              <div
-                class="div-openHours w-100 d-flex justify-content-start align-items-center gap-5 m-4 my-5"
-              >
-                <div class="w-25 d-flex justify-content-between gap-2">
-                  <span class="span-work-day fw-bolder">{{ group.value.day }}</span>
+              <div class="d-flex flex-column justify-content-center align-items-center">
+                <p-fileupload
+                  name="demo"
+                  url="https://www.primefaces.org/cdn/api/upload.php"
+                  [multiple]="true"
+                  accept="application/pdf"
+                  maxFileSize="1000000"
+                  mode="advanced"
+                  [showUploadButton]="false"
+                  [auto]="true"
+                  (onUpload)="
+                    userService.uploadFile($event, userService.userForm.controls.commercialPaper)
+                  "
+                >
+                  <ng-template #content>
+                    @if (userService.userForm.controls.commercialPaper.value) {
+                      <a
+                        [href]="userService.userForm.controls.commercialPaper.value"
+                        target="_blank"
+                        >View</a
+                      >
+                    }
+                  </ng-template></p-fileupload
+                >
+              </div>
+            </div>
+            <h2>Payment Methods</h2>
+            <div class="d-flex justify-content-between flex-wrap my-5">
+              <div class="d-flex w-100 justify-content-center align-items-center gap-5">
+                <div class="d-flex gap-2">
+                  <label class="payment-radio" for="paymentMethods">Mada</label>
 
                   <p-checkbox
-                    size="large"
-                    [formControl]="group.controls.available"
-                    binary="true"
-                  ></p-checkbox>
+                    [formControl]="userService.userForm.controls.paymentMethods"
+                    value="Mada"
+                  />
                 </div>
-                <p-datepicker
-                  [iconDisplay]="'button'"
-                  [showIcon]="true"
-                  icon="pi pi-clock"
-                  hourFormat="hh:mm"
-                  [appendTo]="'body'"
-                  class="date-picker-work-hours"
-                  [timeOnly]="true"
-                  [formControl]="group.controls.openHours"
-                >
-                  <ng-template #footer>
-                    <div class="d-flex gap-3">
-                      <span class="">Flexible</span>
-                      <p-checkbox [binary]="true" [formControl]="group.controls.flexible" />
-                    </div>
-                  </ng-template>
-                </p-datepicker>
-                <span>To</span>
-                <p-datepicker
-                  [iconDisplay]="'button'"
-                  [showIcon]="true"
-                  icon="pi pi-clock"
-                  hourFormat="hh:mm"
-                  [appendTo]="'body'"
-                  class="date-picker-work-hours"
-                  [timeOnly]="true"
-                  [formControl]="group.controls.closeHours"
-                >
-                </p-datepicker>
+                <div class="d-flex gap-2">
+                  <label class="payment-radio" for="paymentMethods">STC Pay</label>
+
+                  <p-checkbox
+                    [formControl]="userService.userForm.controls.paymentMethods"
+                    value="stcPay"
+                  />
+                </div>
+                <div class="d-flex gap-2">
+                  <label class="payment-radio" for="paymentMethods">Apple Pay</label>
+
+                  <p-checkbox
+                    [formControl]="userService.userForm.controls.paymentMethods"
+                    value="applePay"
+                  />
+                </div>
+                <div class="d-flex gap-2">
+                  <label class="payment-radio" for="paymentMethods">Google Pay</label>
+
+                  <p-checkbox
+                    [formControl]="userService.userForm.controls.paymentMethods"
+                    value="googlePay"
+                  />
+                </div>
               </div>
-              }
             </div>
-          </div>
+
+            <p-table [value]="userService.userForm.controls.products.controls">
+              <ng-template #caption>
+                <h3>Business Products</h3>
+              </ng-template>
+              <ng-template #header
+                ><tr>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Category</th>
+                  <th>Discount</th>
+                </tr>
+              </ng-template>
+              <ng-template #body let-group>
+                <tr>
+                  <td>
+                    <input
+                      [formControl]="group.controls.name"
+                      type="text"
+                      pInputText
+                      placeholder="Product name"
+                    />
+                  </td>
+                  <td class="d-flex">
+                    <p-inputNumber currency="SAR" [formControl]="group.controls.price" />
+                  </td>
+                  <td>
+                    <p-select
+                      name="categories"
+                      appendTo="body"
+                      [formControl]="group.controls.categories"
+                      [options]="userService.categories"
+                    >
+                      <ng-template class="w-100 h-100 d-flex justify-content-center" #footer>
+                        <p-input-group>
+                          <p-inputgroup-addon
+                            ><p-button
+                              (click)="userService.addNewCategory()"
+                              icon="pi pi-plus"
+                            ></p-button
+                          ></p-inputgroup-addon>
+                          <input
+                            [formControl]="userService.userForm.controls.newCategory"
+                            type="text"
+                            pInputText
+                            placeholder="New Category"
+                          />
+                        </p-input-group>
+                      </ng-template>
+                    </p-select>
+                  </td>
+                  <td>
+                    <p-select
+                      name="discount"
+                      [formControl]="group.controls.discounts"
+                      appendTo="body"
+                      [options]="userService.discounts"
+                    >
+                      <ng-template class="w-100 h-100 d-flex justify-content-center" #footer>
+                        <p-input-group>
+                          <p-inputgroup-addon
+                            ><p-button
+                              (click)="userService.addNewDiscount()"
+                              icon="pi pi-plus"
+                            ></p-button
+                          ></p-inputgroup-addon>
+                          <input
+                            [formControl]="userService.userForm.controls.newDiscount"
+                            type="text"
+                            pInputText
+                            placeholder="New Discount"
+                          />
+                        </p-input-group>
+                      </ng-template>
+                    </p-select>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template #footer>
+                <div class="d-flex justify-content-start">
+                  <p-button
+                    (onClick)="userService.addNewProduct()"
+                    label="Add"
+                    outlined="true"
+                    icon="pi pi-plus"
+                  />
+                </div>
+              </ng-template>
+            </p-table>
+            <div>
+              <div class="w-100 my-4">
+                <h2>Open hours</h2>
+
+                @for (group of userService.userForm.controls.workHours.controls; track $index) {
+                  <div
+                    class="div-openHours w-100 d-flex justify-content-start align-items-center gap-5 m-4 my-5"
+                  >
+                    <div class="w-25 d-flex justify-content-between gap-2">
+                      <span class="span-work-day fw-bolder">{{ group.value.day }}</span>
+
+                      <p-checkbox
+                        size="large"
+                        [formControl]="group.controls.available"
+                        binary="true"
+                      ></p-checkbox>
+                    </div>
+                    <p-datepicker
+                      [iconDisplay]="'button'"
+                      [showIcon]="true"
+                      icon="pi pi-clock"
+                      hourFormat="hh:mm"
+                      [appendTo]="'body'"
+                      class="date-picker-work-hours"
+                      [timeOnly]="true"
+                      [formControl]="group.controls.openHours"
+                    >
+                      <ng-template #footer>
+                        <div class="d-flex gap-3">
+                          <span class="">Flexible</span>
+                          <p-checkbox [binary]="true" [formControl]="group.controls.flexible" />
+                        </div>
+                      </ng-template>
+                    </p-datepicker>
+                    <span>To</span>
+                    <p-datepicker
+                      [iconDisplay]="'button'"
+                      [showIcon]="true"
+                      icon="pi pi-clock"
+                      hourFormat="hh:mm"
+                      [appendTo]="'body'"
+                      class="date-picker-work-hours"
+                      [timeOnly]="true"
+                      [formControl]="group.controls.closeHours"
+                    >
+                    </p-datepicker>
+                  </div>
+                }
+              </div>
+            </div>
           }
           <!--! Personal account code  -->
-          @else{
-          <p-input-group class="w-100 my-2 d-flex">
-            <p-inputgroup-addon>
-              <i class="pi pi-search" (click)="userService.updateSuggestedCities($event)"></i>
-            </p-inputgroup-addon>
-            <p-autocomplete
-              [formControl]="userService.userForm.controls.city"
-              [suggestions]="userService.suggestedCities"
-              appendTo="body"
-              placeholder="Select your city"
-              (completeMethod)="userService.updateSuggestedCities($event)"
-            />
-          </p-input-group>
-          <div class="d-flex flex-column">
-            <label for="bio">bio</label>
-            <textarea
-              [formControl]="userService.userForm.controls.bio"
-              rows="5"
-              cols="30"
-              pTextarea
-            ></textarea>
-          </div>
-
+          @else {
+            <p-input-group class="w-100 my-2 d-flex">
+              <p-inputgroup-addon>
+                <i class="pi pi-search" (click)="userService.updateSuggestedCities($event)"></i>
+              </p-inputgroup-addon>
+              <p-autocomplete
+                [formControl]="userService.userForm.controls.city"
+                [suggestions]="userService.suggestedCities"
+                appendTo="body"
+                placeholder="Select your city"
+                (completeMethod)="userService.updateSuggestedCities($event)"
+              />
+            </p-input-group>
+            <div class="d-flex flex-column">
+              <label for="bio">bio</label>
+              <textarea
+                [formControl]="userService.userForm.controls.bio"
+                rows="5"
+                cols="30"
+                pTextarea
+              ></textarea>
+            </div>
           }
           <div class="d-flex g-2 justify-content-center gap-5 my-5">
             <p-button
@@ -451,12 +445,10 @@
               (onClick)="userService.visibleSignupDialog = false"
               severity="secondary"
             />
-            @if(userService.skipPersonalAccountStep){
-
-            <p-button label="Skip" (onClick)="activateCallback(3)" severity="success" />
-            } @else{
-
-            <p-button label="Next" (onClick)="activateCallback(3)" severity="success" />
+            @if (userService.skipPersonalAccountStep) {
+              <p-button label="Skip" (onClick)="activateCallback(3)" severity="success" />
+            } @else {
+              <p-button label="Next" (onClick)="activateCallback(3)" severity="success" />
             }
           </div>
         </ng-template>

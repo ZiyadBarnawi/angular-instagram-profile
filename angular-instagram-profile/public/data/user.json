@@ -16,11 +16,11 @@
   "accountType": "business",
   "paymentMethods": ["stcPay", "Mada", "googlePay"],
   "posts": [
-    { "imgSrc": "sunnyDay.jpg", "likesCount": 13 },
-    { "imgSrc": "desert.jpg", "likesCount": 13 },
-    { "imgSrc": "sunFlower.jpg", "likesCount": 13 },
-    { "imgSrc": "carbet.jpg", "likesCount": 13 },
-    { "imgSrc": "rainnyCar.jpg", "likesCount": 13 }
+    { "media": "sunnyDay.jpg", "likes": 13 },
+    { "media": "desert.jpg", "likes": 13 },
+    { "media": "sunFlower.jpg", "likes": 13 },
+    { "media": "carbet.jpg", "likes": 13 },
+    { "media": "rainnyCar.jpg", "likes": 13 }
   ],
   "products": [
     {
