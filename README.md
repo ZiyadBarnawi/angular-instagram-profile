@@ -20,12 +20,18 @@ Weekly report:
   - barrel exports
   - code clean up
 
-  # 18/1/2026 26/1/2025
+  # 18/1/2026 25/1/2025
   ## RxJS
   - Change decision ZoneJS
-  - Observables
-  - Pipes
+  - Observables, subjects, behaivousSubject & Pipes & subscription
+  ## Side 
   - PrimeBlocks
+  - Simple GSAP code
+    ## Refactors:
+    - Unsubscribing
+    - initial user render bug
+    - Code clean-up, deleted unused components 
+  
   
   
 
